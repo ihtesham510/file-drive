@@ -6,7 +6,6 @@ import { ConvexProviderWithClerk } from 'convex/react-clerk'
 import { ConvexReactClient } from 'convex/react'
 import { Toaster } from '@/components/ui/sonner'
 import './index.css'
-import { OrgContextProvider } from './contexts/org-state'
 
 // Set up a Router instance
 const router = createRouter({
@@ -40,9 +39,7 @@ if (!rootElement.innerHTML) {
 		<ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
 			<ConvexProviderWithClerk useAuth={useAuth} client={client}>
 				<Toaster />
-				<OrgContextProvider>
-					<RouterProvider router={router} />
-				</OrgContextProvider>
+				<RouterProvider router={router} />
 			</ConvexProviderWithClerk>
 		</ClerkProvider>,
 	)

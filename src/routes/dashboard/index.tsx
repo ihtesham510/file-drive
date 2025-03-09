@@ -4,6 +4,7 @@ import {
 	SidebarInset,
 	SidebarTrigger,
 } from '@/components/ui/sidebar'
+import { OrgContextProvider } from '@/contexts/org-state'
 import { RedirectToSignIn, useAuth } from '@clerk/clerk-react'
 import { createFileRoute } from '@tanstack/react-router'
 
@@ -20,11 +21,13 @@ export const Route = createFileRoute('/dashboard/')({
 
 function RouteComponent() {
 	return (
-		<SidebarProvider>
-			<AppSideBar />
-			<SidebarInset>
-				<SidebarTrigger />
-			</SidebarInset>
-		</SidebarProvider>
+		<OrgContextProvider>
+			<SidebarProvider>
+				<AppSideBar />
+				<SidebarInset>
+					<SidebarTrigger />
+				</SidebarInset>
+			</SidebarProvider>
+		</OrgContextProvider>
 	)
 }
