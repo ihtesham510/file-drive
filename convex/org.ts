@@ -64,11 +64,12 @@ export const getOrgs = query({
 		const orgs = await ctx.db.query('org').collect()
 		return orgs
 			.filter(org => org.users.some(u => u.userId === user._id))
-			.map(({ _id, _creationTime, name, image_url }) => ({
+			.map(({ _id, _creationTime, name, image_url, users }) => ({
 				_id,
 				_creationTime,
 				name,
 				image_url,
+				_credentials: users.find(u => u.userId === user._id)!.role,
 			}))
 	},
 })
