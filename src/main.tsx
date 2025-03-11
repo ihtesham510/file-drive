@@ -6,6 +6,9 @@ import { ConvexProviderWithClerk } from 'convex/react-clerk'
 import { ConvexReactClient } from 'convex/react'
 import { Toaster } from '@/components/ui/sonner'
 import './index.css'
+import { ThemeProvider } from './contexts/theme-context'
+
+document.documentElement.classList.add('dark')
 
 // Set up a Router instance
 const router = createRouter({
@@ -36,11 +39,13 @@ const client = new ConvexReactClient(VITE_CONVEX_URL)
 if (!rootElement.innerHTML) {
 	const root = ReactDOM.createRoot(rootElement)
 	root.render(
-		<ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
-			<ConvexProviderWithClerk useAuth={useAuth} client={client}>
-				<Toaster />
-				<RouterProvider router={router} />
-			</ConvexProviderWithClerk>
-		</ClerkProvider>,
+		<ThemeProvider>
+			<ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY}>
+				<ConvexProviderWithClerk useAuth={useAuth} client={client}>
+					<Toaster />
+					<RouterProvider router={router} />
+				</ConvexProviderWithClerk>
+			</ClerkProvider>
+		</ThemeProvider>,
 	)
 }
