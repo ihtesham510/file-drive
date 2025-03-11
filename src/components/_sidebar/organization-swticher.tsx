@@ -57,7 +57,7 @@ export function OrganizationSwitcher() {
 								<div className='flex aspect-square size-8 items-center justify-center rounded-lg border border-border'>
 									<Avatar>
 										<AvatarImage
-											src={currentOrg ? currentOrg.image_url : user?.imageUrl}
+											src={currentOrg ? currentOrg.image?.url : user?.imageUrl}
 										/>
 										<AvatarFallback>
 											{currentOrg ? <BuildingIcon /> : <User2Icon />}
@@ -125,7 +125,7 @@ export function OrganizationSwitcher() {
 								>
 									<div className='flex size-6 items-center justify-center rounded-sm border'>
 										<Avatar>
-											<AvatarImage src={org.image_url} />
+											<AvatarImage src={org.image?.url} />
 											<AvatarFallback>
 												<BuildingIcon />
 											</AvatarFallback>

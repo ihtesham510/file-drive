@@ -50,13 +50,19 @@ export function ManageOrganizationDialog({
 								.then(data => data.data)
 							org_image_url = (await getImageUrl({ storageId })) ?? undefined
 							toast.success('Uploaded Image')
-							await updateOrg({ image_url: org_image_url, id: currentOrg?._id })
+							await updateOrg({
+								image:
+									org_image_url && storageId
+										? { url: org_image_url, storageId }
+										: undefined,
+								id: currentOrg?._id,
+							})
 						}
 					}}
 				/>
 				<div className='flex items-center gap-4'>
 					<Avatar className='size-16'>
-						<AvatarImage src={currentOrg?.image_url} />
+						<AvatarImage src={currentOrg?.image?.url} />
 						<AvatarFallback>
 							<Image />
 						</AvatarFallback>

@@ -27,6 +27,7 @@ import { Image, LoaderCircle } from 'lucide-react'
 import { useMutation } from 'convex/react'
 import { api } from '@convex/_generated/api'
 import axios from 'axios'
+import { Id } from '@convex/_generated/dataModel'
 
 const formSchema = z.object({
 	org_name: z.string().min(1).min(2).max(30),
@@ -66,6 +67,7 @@ export function CreateOrganization({
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		try {
 			let org_image_url = undefined
+			let storage_Id: Id<'_storage'> | undefined
 			if (image) {
 				const url = await getUploadUrl()
 				const { storageId } = await axios
@@ -74,12 +76,19 @@ export function CreateOrganization({
 					})
 					.then(data => data.data)
 				org_image_url = (await getImageUrl({ storageId })) ?? undefined
+				storage_Id = storageId
 				toast.success('Uploaded Image')
 			}
 			await createOrg({
 				name: values.org_name,
 				emails: values.members_emails,
-				image_url: org_image_url,
+				image:
+					org_image_url && storage_Id
+						? {
+								url: org_image_url,
+								storageId: storage_Id,
+							}
+						: undefined,
 			})
 
 			toast.success('Organization Created')

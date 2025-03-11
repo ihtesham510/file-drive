@@ -13,7 +13,12 @@ export default defineSchema({
 	}),
 	org: defineTable({
 		name: v.string(),
-		image_url: v.optional(v.string()),
+		image: v.optional(
+			v.object({
+				url: v.string(),
+				storageId: v.id('_storage'),
+			}),
+		),
 		users: v.array(
 			v.object({
 				userId: v.id('user'),
