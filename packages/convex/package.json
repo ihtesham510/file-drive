@@ -1,0 +1,30 @@
+{
+	"name": "@repo/convex",
+	"type": "module",
+	"scripts": {
+		"start": "convex dev",
+		"dev": "convex dev"
+	},
+	"exports": {
+		".": {
+			"types": "./convex/_generated/api.d.ts",
+			"default": "./convex/_generated/api.js"
+		},
+		"./models": {
+			"types": "./convex/_generated/dataModel.d.ts"
+		},
+		"./schema": "./convex/schema.ts"
+	},
+	"devDependencies": {
+		"@types/bun": "latest"
+	},
+	"peerDependencies": {
+		"typescript": "^5"
+	},
+	"dependencies": {
+		"@better-auth/expo": "^1.5.6",
+		"@convex-dev/better-auth": "^0.11.4",
+		"better-auth": "1.5.3",
+		"convex": "^1.34.1"
+	}
+}

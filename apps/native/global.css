@@ -1,0 +1,108 @@
+@import "tailwindcss";
+@import "uniwind";
+
+@theme {
+  /* Font stack (kept from original) */
+  --font-sans: Poppins, ui-sans-serif, sans-serif, system-ui;
+  --font-serif: Inter, ui-sans-serif, sans-serif, system-ui;
+  --font-mono: JetBrains Mono, ui-monospace, monospace;
+
+  /* Border radius (kept from original) */
+  --radius: 0.85rem;
+
+  /* Shadow values (kept from original) */
+  --shadow-x: 0;
+  --shadow-y: 1px;
+  --shadow-blur: 3px;
+  --shadow-spread: 0px;
+  --shadow-opacity: 0.1;
+  --shadow-color: #000000;
+  --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+  --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+  --shadow-sm:
+    0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+  --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+  --shadow-md:
+    0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 2px 4px -1px hsl(0 0% 0% / 0.1);
+  --shadow-lg:
+    0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 4px 6px -1px hsl(0 0% 0% / 0.1);
+  --shadow-xl:
+    0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 8px 10px -1px hsl(0 0% 0% / 0.1);
+  --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+}
+
+@layer theme {
+  :root {
+    @variant light {
+      /* Light theme colors */
+      --color-background: #ffffff;
+      --color-foreground: #000000;
+      --color-card: #f9fbf4;
+      --color-card-foreground: #000000;
+      --color-popover: #f9fbf4;
+      --color-popover-foreground: #000000;
+      --color-primary: #a6c82d;
+      --color-primary-foreground: #000000;
+      --color-secondary: #1b1d1e;
+      --color-secondary-foreground: #edf0f4;
+      --color-muted: #f5f5f5;
+      --color-muted-foreground: #525252;
+      --color-accent: #f4f8e8;
+      --color-accent-foreground: #595e17;
+      --color-destructive: #e54b4f;
+      --color-destructive-foreground: #ffffff;
+      --color-border: #e7e7ee;
+      --color-input: #ebebeb;
+      --color-ring: #212702;
+      --color-chart-1: #4ac885;
+      --color-chart-2: #c92d6a;
+      --color-chart-3: #fd822b;
+      --color-chart-4: #a146fb;
+      --color-chart-5: #747474;
+      --color-sidebar: #f2f2f2;
+      --color-sidebar-foreground: #000000;
+      --color-sidebar-primary: #a6c82d;
+      --color-sidebar-primary-foreground: #000000;
+      --color-sidebar-accent: #f7ffdb;
+      --color-sidebar-accent-foreground: #9ca42d;
+      --color-sidebar-border: #e7e7ee;
+      --color-sidebar-ring: #212702;
+    }
+
+    @variant dark {
+      /* Dark theme colors */
+      --color-background: #151514;
+      --color-foreground: #f0f0f0;
+      --color-card: #1b1b18;
+      --color-card-foreground: #f0f0f0;
+      --color-popover: #191a19;
+      --color-popover-foreground: #f0f0f0;
+      --color-primary: #ffdf21;
+      --color-primary-foreground: #050505;
+      --color-secondary: #1b1d1e;
+      --color-secondary-foreground: #f0f0f0;
+      --color-muted: #262621;
+      --color-muted-foreground: #a0a0a0;
+      --color-accent: #2c2f14;
+      --color-accent-foreground: #b6c82d;
+      --color-destructive: #fd3f65;
+      --color-destructive-foreground: #ffffff;
+      --color-border: #272824;
+      --color-input: #373932;
+      --color-ring: #484d33;
+      --color-chart-1: #4ade80;
+      --color-chart-2: #c92d6a;
+      --color-chart-3: #fca5a5;
+      --color-chart-4: #5993f4;
+      --color-chart-5: #a0a0a0;
+      --color-sidebar: #1f1f1f;
+      --color-sidebar-foreground: #f0f0f0;
+      --color-sidebar-primary: #ffdf21;
+      --color-sidebar-primary-foreground: #050505;
+      --color-sidebar-accent: #21230b;
+      --color-sidebar-accent-foreground: #abbc2f;
+      --color-sidebar-border: #272824;
+      --color-sidebar-ring: #484d33;
+    }
+  }
+}

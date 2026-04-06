@@ -1,0 +1,23 @@
+{
+	"name": "file-drive",
+	"type": "module",
+	"private": true,
+	"devDependencies": {
+		"@biomejs/biome": "2.4.10",
+		"@types/bun": "latest",
+		"dotenv": "^17.3.1",
+		"turbo": "^2.9.4"
+	},
+	"scripts": {
+		"dev": "turbo dev",
+		"set-env": "bun run env.ts"
+	},
+	"workspaces": [
+		"apps/*",
+		"packages/*"
+	],
+	"peerDependencies": {
+		"typescript": "^5"
+	},
+	"packageManager": "bun@1.2.0"
+}

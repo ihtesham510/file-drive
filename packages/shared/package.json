@@ -1,0 +1,21 @@
+{
+	"name": "@repo/shared",
+	"type": "module",
+	"exports": {
+		".": {
+			"default": "./index.ts",
+			"types": "./index.ts"
+		}
+	},
+	"dependencies": {
+		"@repo/convex": "*",
+		"axios": "^1.14.0",
+		"convex": "^1.34.1"
+	},
+	"devDependencies": {
+		"@types/bun": "latest"
+	},
+	"peerDependencies": {
+		"typescript": "^5"
+	}
+}
