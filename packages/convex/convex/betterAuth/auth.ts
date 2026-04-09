@@ -19,14 +19,19 @@ export const createAuthOptions = (ctx: GenericCtx<DataModel>) => {
 	const siteUrl = process.env.SITE_URL!
 	return {
 		appName: 'File Drive',
-		trustedOrigins: [siteUrl, 'exp://'],
-		baseURL: siteUrl,
+		trustedOrigins: [siteUrl, 'exp://', 'filedrive://'],
 		secret: process.env.BETTER_AUTH_SECRET,
 		database: authComponent.adapter(ctx),
 		emailAndPassword: {
 			enabled: true,
 		},
 		plugins: [convex({ authConfig }), expo(), crossDomain({ siteUrl }), organization()],
+		socialProviders: {
+			google: {
+				clientId: process.env.GOOGLE_CLIENT_ID!,
+				clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+			},
+		},
 	} satisfies BetterAuthOptions
 }
 

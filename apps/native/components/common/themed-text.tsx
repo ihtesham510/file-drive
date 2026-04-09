@@ -1,14 +1,19 @@
 import type { TextProps } from 'react-native'
 import { Text } from 'react-native'
+import Animated from 'react-native-reanimated'
+import { cn } from '@/utils/tw'
 
 export function ThemedText({
 	varient = 'default',
-	className = '',
+	className,
+	animated = false,
 	...props
 }: TextProps & {
 	varient?: 'default' | 'bold' | 'semiBold' | 'title'
+	animated?: boolean
 }) {
-	return <Text className={`text-foreground ${varients[varient]} ${className}`} {...props} />
+	const Comp = animated ? Animated.Text : Text
+	return <Comp className={cn(varients[varient], className)} {...props} />
 }
 
 const varients = {

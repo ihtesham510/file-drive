@@ -5,6 +5,14 @@
 		"dev": {
 			"persistent": true,
 			"cache": false
+		},
+		"lint": {
+			"persistent": true,
+			"cache": false
+		},
+		"tunnel": {
+			"cache": false,
+			"interactive": true
 		}
 	}
 }
