@@ -8,10 +8,8 @@ import { ConvexBetterAuthProvider } from '@convex-dev/better-auth/react'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { ConvexProvider, ConvexReactClient } from 'convex/react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { Uniwind, withUniwind } from 'uniwind'
+import { withUniwind } from 'uniwind'
 import { authClient } from '@/lib/auth-client'
-
-Uniwind.setTheme('dark')
 
 const StyledGestureHandlerRootView = withUniwind(GestureHandlerRootView)
 
