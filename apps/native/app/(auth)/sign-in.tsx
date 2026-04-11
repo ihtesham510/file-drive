@@ -7,6 +7,7 @@ import z from 'zod'
 import { GoogleSignIn } from '@/components/auth/google-sign-in'
 import { ThemedText } from '@/components/common/themed-text'
 import { ThemedView } from '@/components/common/themed-view'
+import { authClient } from '@/lib/auth-client'
 
 const schema = z.object({
 	email: z.email('Invalid email address'),
@@ -24,8 +25,12 @@ export default function Page() {
 		resolver: zodResolver(schema),
 	})
 
-	const onSubmit = (data: FormData) => {
-		console.log('Sign in:', data)
+	const onSubmit = async (values: FormData) => {
+		// TODO: add error handling
+		await authClient.signIn.email({
+			email: values.email,
+			password: values.password,
+		})
 	}
 
 	return (

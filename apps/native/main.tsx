@@ -1,18 +1,26 @@
 import type { PropsWithChildren } from 'react'
-import { View } from 'react-native'
 import './global.css'
 import { NotificationContextProvider } from '@/context/notification-context'
 
 import 'react-native-reanimated'
 
 import { ConvexBetterAuthProvider } from '@convex-dev/better-auth/react'
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { ConvexProvider, ConvexReactClient } from 'convex/react'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { Uniwind, withUniwind } from 'uniwind'
 import { authClient } from '@/lib/auth-client'
+
+Uniwind.setTheme('dark')
+
+const StyledGestureHandlerRootView = withUniwind(GestureHandlerRootView)
 
 export function Main({ children }: PropsWithChildren) {
 	return (
 		<Providers>
-			<View className='flex-1 bg-background'>{children}</View>
+			<StyledGestureHandlerRootView className='flex-1 bg-background'>
+				<BottomSheetModalProvider>{children}</BottomSheetModalProvider>
+			</StyledGestureHandlerRootView>
 		</Providers>
 	)
 }

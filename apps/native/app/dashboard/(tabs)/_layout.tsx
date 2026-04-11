@@ -4,6 +4,7 @@ import { Tabs } from 'expo-router'
 import { TabBar } from '@/components/common/tab-bar'
 
 export default function Layout() {
+	// TODO: fix: white flashes while switching tabs in dark mode
 	return (
 		<Tabs screenOptions={{ headerShown: false }} tabBar={props => <TabBar {...props} />}>
 			<Tabs.Screen
