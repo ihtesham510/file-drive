@@ -1,6 +1,5 @@
-import { api } from '@repo/convex'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
-import { useConvex, useQuery } from 'convex/react'
+import { useConvex, useConvexAuth } from 'convex/react'
 import ReactDOM from 'react-dom/client'
 import { ConvexProvider } from '@/components/common/convex-provider'
 import { Spinner } from '@/components/ui/spinner'
@@ -35,12 +34,12 @@ if (!rootElement.innerHTML) {
 
 function App() {
 	const convex = useConvex()
-	const session = authClient.useSession()
-	if (session.isPending)
+	const { isLoading, isAuthenticated } = useConvexAuth()
+	if (isLoading)
 		return (
-			<div className='flex bg-background justify-center items-center h-screen w-full'>
+			<div className='flex h-screen w-full items-center justify-center bg-background'>
 				<Spinner className='size-8' />
 			</div>
 		)
-	return <RouterProvider router={router} context={{ convex, session, authClient }} />
+	return <RouterProvider router={router} context={{ convex, authClient, isAuthenticated }} />
 }

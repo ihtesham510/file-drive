@@ -6,7 +6,12 @@ import type { NavigationRoute, ParamListBase } from '@react-navigation/native'
 import { router } from 'expo-router'
 import { useEffect } from 'react'
 import { Dimensions, Pressable } from 'react-native'
-import { interpolate, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+import {
+	interpolate,
+	useAnimatedStyle,
+	useSharedValue,
+	withSpring,
+} from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useCSSVariable } from 'uniwind'
 import { ThemedText } from '@/components/common/themed-text'
@@ -111,7 +116,12 @@ function PlusButton() {
 	return (
 		<BottomSheet>
 			<BottomSheetTrigger className='rounded-full bg-primary p-2'>
-				<HugeiconsIcon size={28} icon={PlusSignIcon} strokeWidth={2.8} color={primaryForeground} />
+				<HugeiconsIcon
+					size={28}
+					icon={PlusSignIcon}
+					strokeWidth={2.8}
+					color={primaryForeground}
+				/>
 			</BottomSheetTrigger>
 			<BottomSheetContent snapPoints={[200]}>
 				<ThemedView className='w-full items-center justify-between bg-background p-4'>

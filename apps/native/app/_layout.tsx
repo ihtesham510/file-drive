@@ -21,7 +21,11 @@ export default function RootLayout() {
 	}, [session.isPending])
 	return (
 		<Main>
-			<StatusBar translucent={false} backgroundColor={backgroundColor} barStyle={theme === 'light' ? 'dark-content' : 'light-content'} />
+			<StatusBar
+				translucent={false}
+				backgroundColor={backgroundColor}
+				barStyle={theme === 'light' ? 'dark-content' : 'light-content'}
+			/>
 			<Stack screenOptions={{ headerShown: false }}>
 				<Stack.Protected guard={!authenticated}>
 					<Stack.Screen name='index' />

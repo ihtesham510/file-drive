@@ -9,7 +9,7 @@ import type { authClient } from '@/lib/auth-client'
 interface RouterContext {
 	authClient: typeof authClient
 	convex: ConvexReactClient
-	session: ReturnType<typeof authClient.useSession>
+	isAuthenticated: boolean
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({

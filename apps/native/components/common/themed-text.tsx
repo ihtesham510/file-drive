@@ -13,7 +13,9 @@ export function ThemedText({
 	animated?: boolean
 }) {
 	const Comp = animated ? Animated.Text : Text
-	return <Comp className={cn('text-foreground', varients[varient], className)} {...props} />
+	return (
+		<Comp className={cn('text-foreground', varients[varient], className)} {...props} />
+	)
 }
 
 const varients = {

@@ -57,7 +57,7 @@ function RouteComponent() {
 				</Button>
 				<div>
 					{results.map((file, index) => (
-						<div key={index} className='flex justify-between items-center'>
+						<div key={index} className='flex items-center justify-between'>
 							<h1>{file.name}</h1>
 							<div>
 								<Button onClick={() => deleteFiles({ file_ids: [file._id] })}>

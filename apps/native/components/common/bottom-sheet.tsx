@@ -5,10 +5,18 @@ import {
 	type BottomSheetModalProps,
 	BottomSheetView,
 } from '@gorhom/bottom-sheet'
-import { createContext, type PropsWithChildren, useCallback, useContext, useRef } from 'react'
+import {
+	createContext,
+	type PropsWithChildren,
+	useCallback,
+	useContext,
+	useRef,
+} from 'react'
 import type { PressableProps, StyleProp, ViewStyle } from 'react-native'
 import { Pressable, StyleSheet } from 'react-native'
 import { useCSSVariable } from 'uniwind'
+
+export { BottomSheetScrollView } from '@gorhom/bottom-sheet'
 
 interface BottonSheetContext {
 	ref: React.RefObject<BottomSheetModal | null>
@@ -28,7 +36,9 @@ export function BottomSheet(props: PropsWithChildren) {
 	const ref = useRef<BottomSheetModal>(null)
 	const open = useCallback(() => ref.current?.present(), [])
 	const close = useCallback(() => ref.current?.dismiss(), [])
-	return <context.Provider value={{ ref, open, close }}>{props.children}</context.Provider>
+	return (
+		<context.Provider value={{ ref, open, close }}>{props.children}</context.Provider>
+	)
 }
 
 function useBottonSheet() {
@@ -44,7 +54,12 @@ export function BottomSheetContent(props: BottomSheetProps) {
 
 	const renderBackdrop = useCallback(
 		(backdropProps: BottomSheetBackdropProps) => (
-			<BottomSheetBackdrop {...backdropProps} disappearsOnIndex={-1} appearsOnIndex={0} pressBehavior='close' />
+			<BottomSheetBackdrop
+				{...backdropProps}
+				disappearsOnIndex={-1}
+				appearsOnIndex={0}
+				pressBehavior='close'
+			/>
 		),
 		[],
 	)
@@ -87,7 +102,9 @@ export function BottomSheetContent(props: BottomSheetProps) {
 				props.onChange?.(e, position, type)
 			}}
 		>
-			<BottomSheetView style={[styles.contentContainer, props.view]}>{props.children}</BottomSheetView>
+			<BottomSheetView style={[styles.contentContainer, props.view]}>
+				{props.children}
+			</BottomSheetView>
 		</BottomSheetModal>
 	)
 }

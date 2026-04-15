@@ -1,22 +1,11 @@
-import { GitHubLogoIcon } from '@radix-ui/react-icons'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { authClient } from '@/lib/auth-client'
 
-const signInWithGitHub = async () => {
-	const { error } = await authClient.signIn.social({
-		provider: 'github',
-	})
-
-	if (error) {
-		console.log(error.message)
-		toast.error(error.message)
-	}
-}
-
 const signInWithGoogle = async () => {
 	const { error } = await authClient.signIn.social({
 		provider: 'google',
+		callbackURL: `${window.location.origin}/dashboard`,
 	})
 
 	if (error) {
@@ -27,11 +16,7 @@ const signInWithGoogle = async () => {
 
 export function SocialLogins() {
 	return (
-		<div className='grid gap-4 sm:grid-cols-2'>
-			<Button variant='outline' type='button' className='w-full' onClick={signInWithGitHub}>
-				<GitHubLogoIcon className='mr-2 h-4 w-4' />
-				Continue with Github
-			</Button>
+		<div className='grid min-w-sm grid-cols-1 gap-4'>
 			<Button variant='outline' type='button' className='w-full' onClick={signInWithGoogle}>
 				<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48' className='mr-2 h-4 w-4' aria-hidden>
 					<title>Google</title>

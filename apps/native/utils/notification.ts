@@ -26,10 +26,13 @@ export async function registerForPushNotificationsAsync() {
 			finalStatus = status
 		}
 		if (finalStatus !== 'granted') {
-			handleRegistrationError('Permission not granted to get push token for push notification!')
+			handleRegistrationError(
+				'Permission not granted to get push token for push notification!',
+			)
 			return
 		}
-		const projectId = Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId
+		const projectId =
+			Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId
 		if (!projectId) {
 			handleRegistrationError('Project ID not found')
 		}

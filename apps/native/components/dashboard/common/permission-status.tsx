@@ -14,8 +14,9 @@ export function PermissionNotGranted() {
 				<ThemedView className='items-center justify-center gap-2'>
 					<ThemedText className='font-bold text-3xl'>Permission Denied</ThemedText>
 					<ThemedText className='wrap max-w-75 flex-wrap text-center text-muted-foreground leading-4'>
-						This app needs access to your photo library to let you upload and share files. Without this permission, you wont be able to
-						select images or videos from your device.
+						This app needs access to your photo library to let you upload and share files.
+						Without this permission, you wont be able to select images or videos from your
+						device.
 					</ThemedText>
 				</ThemedView>
 				<Pressable className='w-full items-center justify-center rounded-md bg-primary p-2 px-16'>
@@ -31,7 +32,12 @@ export function PermissionNotGranted() {
 function NotGrantedSvg() {
 	const primaryColor = useCSSVariable('--color-primary') as string
 	return (
-		<Svg width={280} height={280} viewBox='0 0 750 750' preserveAspectRatio='xMidYMid meet'>
+		<Svg
+			width={280}
+			height={280}
+			viewBox='0 0 750 750'
+			preserveAspectRatio='xMidYMid meet'
+		>
 			<G id='Group_9' data-name='Group 9' transform='translate(-589 -184)'>
 				<Path
 					id='Path_274-143'

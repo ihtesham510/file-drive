@@ -3,53 +3,33 @@ import { useCallback, useEffect, useState } from 'react'
 
 export type MediaType = 'image' | 'video' | 'all'
 
-export interface MediaFile {
-	id: string
-	uri: string
-	filename: string
-	mediaType: MediaLibrary.MediaTypeValue
-	width: number
-	height: number
-	duration: number
-	creationTime: number
-	modificationTime: number
-	fileSize?: number
-}
-
 export interface UseFilesOptions {
 	mediaType?: MediaType
 	pageSize?: number
 	albumName?: string
 }
 
-function toMediaTypeValue(type: MediaType): MediaLibrary.MediaTypeValue | MediaLibrary.MediaTypeValue[] {
+function toMediaTypeValue(
+	type: MediaType,
+): MediaLibrary.MediaTypeValue | MediaLibrary.MediaTypeValue[] {
 	if (type === 'image') return MediaLibrary.MediaType.photo
 	if (type === 'video') return MediaLibrary.MediaType.video
 	return [MediaLibrary.MediaType.photo, MediaLibrary.MediaType.video]
 }
 
-function assetToMediaFile(asset: MediaLibrary.Asset): MediaFile {
-	return {
-		id: asset.id,
-		uri: asset.uri,
-		filename: asset.filename,
-		mediaType: asset.mediaType,
-		width: asset.width,
-		height: asset.height,
-		duration: asset.duration,
-		creationTime: asset.creationTime,
-		modificationTime: asset.modificationTime,
-	}
-}
-
-export function useFiles({ mediaType = 'all', pageSize = 30, albumName }: UseFilesOptions = {}) {
-	const [files, setFiles] = useState<MediaFile[]>([])
+export function useFiles({
+	mediaType = 'all',
+	pageSize = 30,
+	albumName,
+}: UseFilesOptions = {}) {
+	const [files, setFiles] = useState<MediaLibrary.Asset[]>([])
 	const [isLoading, setIsLoading] = useState(false)
 	const [isLoadingMore, setIsLoadingMore] = useState(false)
 	const [hasMore, setHasMore] = useState(true)
 	const [endCursor, setEndCursor] = useState<string | undefined>(undefined)
 	const [error, setError] = useState<string | null>(null)
-	const [permissionStatus, setPermissionStatus] = useState<MediaLibrary.PermissionStatus | null>(null)
+	const [permissionStatus, setPermissionStatus] =
+		useState<MediaLibrary.PermissionStatus | null>(null)
 	const [albumId, setAlbumId] = useState<string | undefined>(undefined)
 
 	const checkPermissions = useCallback(async () => {
@@ -87,7 +67,6 @@ export function useFiles({ mediaType = 'all', pageSize = 30, albumName }: UseFil
 		try {
 			const granted = await checkPermissions()
 			if (!granted) {
-				console.log('permission not granted')
 				setIsLoading(false)
 				return
 			}
@@ -106,7 +85,7 @@ export function useFiles({ mediaType = 'all', pageSize = 30, albumName }: UseFil
 				...(resolvedAlbumId ? { album: resolvedAlbumId } : {}),
 			})
 
-			setFiles(assets.map(assetToMediaFile))
+			setFiles(assets)
 			setHasMore(hasNextPage)
 			setEndCursor(cursor)
 		} catch (e) {
@@ -136,7 +115,7 @@ export function useFiles({ mediaType = 'all', pageSize = 30, albumName }: UseFil
 				...(albumId ? { album: albumId } : {}),
 			})
 
-			setFiles(prev => [...prev, ...assets.map(assetToMediaFile)])
+			setFiles(prev => [...prev, ...assets])
 			setHasMore(hasNextPage)
 			setEndCursor(cursor)
 		} catch (e) {
@@ -168,12 +147,6 @@ export function useFiles({ mediaType = 'all', pageSize = 30, albumName }: UseFil
 
 		return () => subscription.remove()
 	}, [permissionStatus, refresh])
-
-	useEffect(() => {
-		if (permissionStatus !== MediaLibrary.PermissionStatus.UNDETERMINED) {
-			requestPermission()
-		}
-	}, [permissionStatus, requestPermission])
 
 	return {
 		files,

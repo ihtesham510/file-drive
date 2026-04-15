@@ -1,6 +1,7 @@
 import { NavMain } from '@/components/dashboard/sidebar/nav-main'
-import { Sidebar, SidebarHeader } from '@/components/ui/sidebar'
+import { Sidebar, SidebarFooter, SidebarHeader } from '@/components/ui/sidebar'
 import { OrgSwitcher } from './nav-switcher'
+import { NavUser } from './nav-user'
 
 export function DashboardSideBar() {
 	return (
@@ -9,6 +10,9 @@ export function DashboardSideBar() {
 				<OrgSwitcher />
 			</SidebarHeader>
 			<NavMain />
+			<SidebarFooter>
+				<NavUser />
+			</SidebarFooter>
 		</Sidebar>
 	)
 }

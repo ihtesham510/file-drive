@@ -3,7 +3,13 @@ import Svg, { Path } from 'react-native-svg'
 import { authClient } from '@/lib/auth-client'
 import { cn } from '@/utils/tw'
 
-export function GoogleSignIn({ buttonProps, buttonViewProps }: { buttonProps?: PressableProps; buttonViewProps?: ViewProps }) {
+export function GoogleSignIn({
+	buttonProps,
+	buttonViewProps,
+}: {
+	buttonProps?: PressableProps
+	buttonViewProps?: ViewProps
+}) {
 	return (
 		<View className={cn('flex-1', buttonViewProps?.className)} {...buttonViewProps}>
 			<Pressable

@@ -1,7 +1,13 @@
 import { api } from '@repo/convex'
 import { useAction } from 'convex/react'
 import * as Notifications from 'expo-notifications'
-import { createContext, type PropsWithChildren, useContext, useEffect, useState } from 'react'
+import {
+	createContext,
+	type PropsWithChildren,
+	useContext,
+	useEffect,
+	useState,
+} from 'react'
 import { Platform } from 'react-native'
 import { authClient } from '@/lib/auth-client'
 import { registerForPushNotificationsAsync } from '@/utils/notification'
@@ -44,7 +50,9 @@ export function NotificationContextProvider({ children }: PropsWithChildren) {
 	const session = authClient.useSession()
 	const [token, setToken] = useState<string>()
 	const [channels, setChannels] = useState<Notifications.NotificationChannel[]>([])
-	const [notification, setNotification] = useState<Notifications.Notification | undefined>(undefined)
+	const [notification, setNotification] = useState<
+		Notifications.Notification | undefined
+	>(undefined)
 	const [error, setError] = useState<Error | null>(null)
 
 	useEffect(() => {
@@ -59,13 +67,17 @@ export function NotificationContextProvider({ children }: PropsWithChildren) {
 		if (Platform.OS === 'android') {
 			Notifications.getNotificationChannelsAsync().then(value => setChannels(value ?? []))
 		}
-		const notificationListener = Notifications.addNotificationReceivedListener(notification => {
-			setNotification(notification)
-		})
+		const notificationListener = Notifications.addNotificationReceivedListener(
+			notification => {
+				setNotification(notification)
+			},
+		)
 
-		const responseListener = Notifications.addNotificationResponseReceivedListener(response => {
-			console.log(response)
-		})
+		const responseListener = Notifications.addNotificationResponseReceivedListener(
+			response => {
+				console.log(response)
+			},
+		)
 
 		return () => {
 			notificationListener.remove()
@@ -79,7 +91,13 @@ export function NotificationContextProvider({ children }: PropsWithChildren) {
 			registerToken({ token, id })
 		}
 	}, [token, session.data?.user, registerToken])
-	return <context.Provider value={{ token, channels, notification, error, schedulePushNotification }}>{children}</context.Provider>
+	return (
+		<context.Provider
+			value={{ token, channels, notification, error, schedulePushNotification }}
+		>
+			{children}
+		</context.Provider>
+	)
 }
 
 export function useNotifications() {

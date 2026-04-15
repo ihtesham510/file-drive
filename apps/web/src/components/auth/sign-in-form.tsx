@@ -32,7 +32,7 @@ export function SignInForm() {
 	}
 
 	return (
-		<div className='flex justify-center items-center min-h-screen'>
+		<div className='flex min-h-screen items-center justify-center'>
 			<Form {...form}>
 				<form className='max-w-lg' onSubmit={form.handleSubmit(onSubmit)}>
 					<div className='flex flex-col gap-6'>
@@ -43,7 +43,7 @@ export function SignInForm() {
 								</div>
 								<span className='sr-only'>Acme Inc.</span>
 							</Link>
-							<h1 className='text-xl font-bold'>Welcome Back.</h1>
+							<h1 className='font-bold text-xl'>Welcome Back.</h1>
 							<div className='text-center text-sm'>
 								Don&apos;t have an account?{' '}
 								<Link to='/sign-up' className='underline underline-offset-4'>
@@ -87,8 +87,8 @@ export function SignInForm() {
 								{form.formState.isSubmitting ? <LoaderCircle className='size-5 animate-spin' /> : 'Log In'}
 							</Button>
 						</div>
-						<div className='after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t'>
-							<span className='bg-background text-muted-foreground relative z-10 px-2'>Or</span>
+						<div className='relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-border after:border-t'>
+							<span className='relative z-10 bg-background px-2 text-muted-foreground'>Or</span>
 						</div>
 						<SocialLogins />
 					</div>

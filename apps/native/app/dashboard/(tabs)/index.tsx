@@ -1,15 +1,25 @@
-import { GridViewIcon, LayoutTwoColumnIcon, List, ParagraphBulletsPoint02Icon } from '@hugeicons/core-free-icons'
+import {
+	GridViewIcon,
+	LayoutTwoColumnIcon,
+	List,
+	ParagraphBulletsPoint02Icon,
+} from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react-native'
 import { api } from '@repo/convex'
 import { usePaginatedQuery } from 'convex/react'
-import { Pressable, TextInput } from 'react-native'
+import { Image } from 'expo-image'
+import { FlatList, Pressable, TextInput } from 'react-native'
 import { useCSSVariable } from 'uniwind'
-import { BottomSheet, BottomSheetContent, BottomSheetTrigger } from '@/components/common/bottom-sheet'
+import {
+	BottomSheet,
+	BottomSheetContent,
+	BottomSheetTrigger,
+} from '@/components/common/bottom-sheet'
+import { RefreshableContent } from '@/components/common/refreshable-content'
 import { Spinner } from '@/components/common/spinner'
 import { ThemedSafeAreaView } from '@/components/common/themed-safe-area-view'
 import { ThemedText } from '@/components/common/themed-text'
 import { ThemedView } from '@/components/common/themed-view'
-import { FileView } from '@/components/dashboard/home/file-viewer'
 
 export default function Page() {
 	const iconColor = useCSSVariable('--color-muted-foreground') as string
@@ -47,7 +57,11 @@ export default function Page() {
 						/>
 
 						<BottomSheetTrigger>
-							<HugeiconsIcon icon={ParagraphBulletsPoint02Icon} size={28} color={iconColor} />
+							<HugeiconsIcon
+								icon={ParagraphBulletsPoint02Icon}
+								size={28}
+								color={iconColor}
+							/>
 						</BottomSheetTrigger>
 						<BottomSheetContent snapPoints={[250]}>
 							<ThemedView className='w-full items-center justify-between bg-background p-4'>
@@ -66,9 +80,25 @@ export default function Page() {
 							</ThemedView>
 						</BottomSheetContent>
 					</ThemedView>
-					<ThemedView>
-						<FileView files={files.results} />
-					</ThemedView>
+					<RefreshableContent
+						onReload={async () => await new Promise(res => setTimeout(res, 1000))}
+					>
+						<FlatList
+							data={files.results}
+							contentContainerClassName='space-y-1 space-x-1'
+							renderItem={({ item }) => {
+								return (
+									<ThemedView className='min-h-100 flex-1 items-center justify-center bg-secondary'>
+										<Image
+											source={{ uri: item.data.url }}
+											contentFit='cover'
+											style={{ width: '100%', height: 400 }}
+										/>
+									</ThemedView>
+								)
+							}}
+						/>
+					</RefreshableContent>
 				</ThemedView>
 			</BottomSheet>
 		</ThemedSafeAreaView>
