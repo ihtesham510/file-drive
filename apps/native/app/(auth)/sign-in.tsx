@@ -43,8 +43,12 @@ export default function Page() {
 				<View className='flex-1 px-6'>
 					{/* Header */}
 					<View className='mt-16 mb-8'>
-						<ThemedText className='mb-1 font-bold text-3xl text-foreground tracking-tight'>Welcome back</ThemedText>
-						<ThemedText className='text-muted-foreground text-sm'>Sign in to your account</ThemedText>
+						<ThemedText className='mb-1 font-bold text-3xl text-foreground tracking-tight'>
+							Welcome back
+						</ThemedText>
+						<ThemedText className='text-muted-foreground text-sm'>
+							Sign in to your account
+						</ThemedText>
 					</View>
 
 					{/* Social Logins */}
@@ -81,7 +85,9 @@ export default function Page() {
 									/>
 								)}
 							/>
-							{errors.email && <Text className='text-destructive text-xs'>{errors.email.message}</Text>}
+							{errors.email && (
+								<Text className='text-destructive text-xs'>{errors.email.message}</Text>
+							)}
 						</View>
 
 						{/* Password */}
@@ -89,7 +95,9 @@ export default function Page() {
 							<View className='flex-row items-center justify-between'>
 								<Text className='font-medium text-foreground text-sm'>Password</Text>
 								<Pressable className='active:opacity-70'>
-									<Text className='font-medium text-primary text-sm'>Forgot password?</Text>
+									<Text className='font-medium text-primary text-sm'>
+										Forgot password?
+									</Text>
 								</Pressable>
 							</View>
 							<Controller
@@ -109,19 +117,31 @@ export default function Page() {
 									/>
 								)}
 							/>
-							{errors.password && <Text className='text-destructive text-xs'>{errors.password.message}</Text>}
+							{errors.password && (
+								<Text className='text-destructive text-xs'>
+									{errors.password.message}
+								</Text>
+							)}
 						</View>
 
 						{/* Submit */}
-						<Pressable className='mt-1 items-center rounded-xl bg-primary py-4 active:opacity-80' onPress={handleSubmit(onSubmit)}>
-							<Text className='font-semibold text-base text-primary-foreground'>Sign in</Text>
+						<Pressable
+							className='mt-1 items-center rounded-xl bg-primary py-4 active:opacity-80'
+							onPress={handleSubmit(onSubmit)}
+						>
+							<Text className='font-semibold text-base text-primary-foreground'>
+								Sign in
+							</Text>
 						</Pressable>
 					</View>
 
 					{/* Footer */}
 					<View className='mt-8 flex-row items-center justify-center pb-10'>
 						<Text className='text-muted-foreground text-sm'>Don't have an account? </Text>
-						<Pressable className='active:opacity-70' onPress={() => router.replace('/sign-up')}>
+						<Pressable
+							className='active:opacity-70'
+							onPress={() => router.replace('/sign-up')}
+						>
 							<Text className='font-semibold text-primary text-sm'>Sign up</Text>
 						</Pressable>
 					</View>
