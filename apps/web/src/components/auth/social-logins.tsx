@@ -17,8 +17,18 @@ const signInWithGoogle = async () => {
 export function SocialLogins() {
 	return (
 		<div className='grid min-w-sm grid-cols-1 gap-4'>
-			<Button variant='outline' type='button' className='w-full' onClick={signInWithGoogle}>
-				<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48' className='mr-2 h-4 w-4' aria-hidden>
+			<Button
+				variant='outline'
+				type='button'
+				className='w-full'
+				onClick={signInWithGoogle}
+			>
+				<svg
+					xmlns='http://www.w3.org/2000/svg'
+					viewBox='0 0 48 48'
+					className='mr-2 h-4 w-4'
+					aria-hidden
+				>
 					<title>Google</title>
 					<path
 						fill='#FFC107'

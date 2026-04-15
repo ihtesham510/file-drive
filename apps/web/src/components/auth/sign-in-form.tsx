@@ -5,7 +5,14 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { SocialLogins } from '@/components/auth/social-logins'
 import { Button } from '@/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/password-input'
 import { authClient } from '@/lib/auth-client'
@@ -83,12 +90,22 @@ export function SignInForm() {
 									)}
 								/>
 							</div>
-							<Button type='submit' className='w-full' disabled={form.formState.isSubmitting}>
-								{form.formState.isSubmitting ? <LoaderCircle className='size-5 animate-spin' /> : 'Log In'}
+							<Button
+								type='submit'
+								className='w-full'
+								disabled={form.formState.isSubmitting}
+							>
+								{form.formState.isSubmitting ? (
+									<LoaderCircle className='size-5 animate-spin' />
+								) : (
+									'Log In'
+								)}
 							</Button>
 						</div>
 						<div className='relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-border after:border-t'>
-							<span className='relative z-10 bg-background px-2 text-muted-foreground'>Or</span>
+							<span className='relative z-10 bg-background px-2 text-muted-foreground'>
+								Or
+							</span>
 						</div>
 						<SocialLogins />
 					</div>

@@ -10,7 +10,12 @@ import {
 	DropdownMenuShortcut,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar'
+import {
+	SidebarMenu,
+	SidebarMenuButton,
+	SidebarMenuItem,
+	useSidebar,
+} from '@/components/ui/sidebar'
 import { Skeleton } from '@/components/ui/skeleton'
 
 export function OrgSwitcher() {
@@ -27,8 +32,10 @@ export function OrgSwitcher() {
 		await activeOrg.refetch()
 	}
 	const activeOrgLoading = activeOrg.isPending || activeOrg.isRefetching
-	const noActiveOrg = !activeOrgLoading && !activeOrg.data && orgs.data && orgs.data?.length > 0
-	const noOrgPresent = !activeOrgLoading && !activeOrg.data && orgs.data && orgs.data?.length === 0
+	const noActiveOrg =
+		!activeOrgLoading && !activeOrg.data && orgs.data && orgs.data?.length > 0
+	const noOrgPresent =
+		!activeOrgLoading && !activeOrg.data && orgs.data && orgs.data?.length === 0
 
 	return (
 		<SidebarMenu>
@@ -36,7 +43,10 @@ export function OrgSwitcher() {
 				<DropdownMenu>
 					{!activeOrgLoading && activeOrg.data && (
 						<DropdownMenuTrigger asChild>
-							<SidebarMenuButton size='lg' className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'>
+							<SidebarMenuButton
+								size='lg'
+								className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
+							>
 								<Avatar>
 									<AvatarImage src={activeOrg.data?.logo ?? undefined} />
 									<AvatarFallback>
@@ -54,13 +64,16 @@ export function OrgSwitcher() {
 					)}
 					{activeOrgLoading && (
 						<SidebarMenuButton size='lg'>
-							<Skeleton className='w-full h-[300px] rounded-md' />
+							<Skeleton className='h-[300px] w-full rounded-md' />
 						</SidebarMenuButton>
 					)}
 					{noActiveOrg && (
 						<DropdownMenuTrigger asChild>
-							<SidebarMenuButton size='lg' className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'>
-								<div className='flex aspect-square size-8 items-center justify-center rounded-lg border-border border-dotted border-2 text-sidebar-primary-foreground'>
+							<SidebarMenuButton
+								size='lg'
+								className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
+							>
+								<div className='flex aspect-square size-8 items-center justify-center rounded-lg border-2 border-border border-dotted text-sidebar-primary-foreground'>
 									<div className='size-4' />
 								</div>
 								<span>Select Organization</span>
@@ -70,7 +83,10 @@ export function OrgSwitcher() {
 					)}
 					{noOrgPresent && (
 						<DropdownMenuTrigger asChild>
-							<SidebarMenuButton size='lg' className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'>
+							<SidebarMenuButton
+								size='lg'
+								className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
+							>
 								<div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground'>
 									<PlusIcon className='size-4' />
 								</div>
@@ -84,9 +100,15 @@ export function OrgSwitcher() {
 						side={isMobile ? 'bottom' : 'right'}
 						sideOffset={4}
 					>
-						<DropdownMenuLabel className='text-xs text-muted-foreground'>Organizations</DropdownMenuLabel>
+						<DropdownMenuLabel className='text-muted-foreground text-xs'>
+							Organizations
+						</DropdownMenuLabel>
 						{orgs.data?.map((org, index) => (
-							<DropdownMenuItem key={org.name} onClick={() => handleSelectOrg(org.id)} className='gap-2 p-2 aria-selected:bg-background'>
+							<DropdownMenuItem
+								key={org.name}
+								onClick={() => handleSelectOrg(org.id)}
+								className='gap-2 p-2 aria-selected:bg-background'
+							>
 								<Avatar>
 									<AvatarImage src={org.logo ?? undefined} />
 									<AvatarFallback>

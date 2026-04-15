@@ -41,5 +41,7 @@ function App() {
 				<Spinner className='size-8' />
 			</div>
 		)
-	return <RouterProvider router={router} context={{ convex, authClient, isAuthenticated }} />
+	return (
+		<RouterProvider router={router} context={{ convex, authClient, isAuthenticated }} />
+	)
 }

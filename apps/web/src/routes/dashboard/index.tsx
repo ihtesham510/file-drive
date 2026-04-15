@@ -72,7 +72,9 @@ function RouteComponent() {
 						<Spinner className='size-8' />
 					</div>
 				)}
-				{status === 'CanLoadMore' && <Button onClick={() => loadMore(10)}>Load More</Button>}
+				{status === 'CanLoadMore' && (
+					<Button onClick={() => loadMore(10)}>Load More</Button>
+				)}
 			</div>
 		</div>
 	)

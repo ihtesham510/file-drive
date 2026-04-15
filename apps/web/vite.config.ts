@@ -9,7 +9,13 @@ const config = defineConfig({
 	resolve: {
 		dedupe: ['react', 'react-dom'],
 	},
-	plugins: [devtools(), tsconfigPaths(), tailwindcss(), tanstackRouter({ target: 'react', autoCodeSplitting: true }), viteReact()],
+	plugins: [
+		devtools(),
+		tsconfigPaths(),
+		tailwindcss(),
+		tanstackRouter({ target: 'react', autoCodeSplitting: true }),
+		viteReact(),
+	],
 })
 
 export default config

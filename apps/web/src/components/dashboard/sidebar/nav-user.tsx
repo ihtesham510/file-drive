@@ -1,7 +1,12 @@
 import { useRouteContext, useRouter } from '@tanstack/react-router'
 import { LogOut } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar'
 
 export function NavUser() {
@@ -14,12 +19,15 @@ export function NavUser() {
 			<SidebarMenuItem>
 				<DropdownMenu>
 					<DropdownMenuTrigger>
-						<SidebarMenuButton size='lg' className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'>
+						<SidebarMenuButton
+							size='lg'
+							className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
+						>
 							<Avatar className='h-8 w-8 rounded-lg'>
-								<AvatarImage src={user.image ?? undefined} alt={user.name} />
+								<AvatarImage src={user.image as string} alt={user.name} />
 								<AvatarFallback className='rounded-lg'>
-									{user.name[0]}
-									{user.name[1]}
+									{user.name?.[0]}
+									{user.name?.[1]}
 								</AvatarFallback>
 							</Avatar>
 							<div className='grid flex-1 text-left text-sm leading-tight'>
