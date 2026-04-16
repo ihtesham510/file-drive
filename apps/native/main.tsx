@@ -9,6 +9,7 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { ConvexProvider, ConvexReactClient } from 'convex/react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { withUniwind } from 'uniwind'
+import { OrganizationContextProvider } from '@/context/organization-context'
 import { authClient } from '@/lib/auth-client'
 
 const StyledGestureHandlerRootView = withUniwind(GestureHandlerRootView)
@@ -30,7 +31,9 @@ function Providers({ children }: PropsWithChildren) {
 	return (
 		<ConvexProvider client={client}>
 			<ConvexBetterAuthProvider client={client} authClient={authClient}>
-				<NotificationContextProvider>{children}</NotificationContextProvider>
+				<NotificationContextProvider>
+					<OrganizationContextProvider>{children}</OrganizationContextProvider>
+				</NotificationContextProvider>
 			</ConvexBetterAuthProvider>
 		</ConvexProvider>
 	)

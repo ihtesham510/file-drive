@@ -60,6 +60,8 @@ export function RefreshableContent({
 					} finally {
 						resetPan()
 					}
+				} else {
+					resetPan()
 				}
 			},
 		}),
