@@ -1,0 +1,29 @@
+{
+  "name": "@file-drive/api",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {},
+  "dependencies": {
+    "@file-drive/auth": "workspace:*",
+    "@file-drive/db": "workspace:*",
+    "@file-drive/env": "workspace:*",
+    "@trpc/client": "catalog:",
+    "@trpc/server": "catalog:",
+    "@types/pg": "catalog:",
+    "dotenv": "catalog:",
+    "drizzle-orm": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@file-drive/config": "workspace:*",
+    "hono": "catalog:",
+    "typescript": "^6"
+  }
+}

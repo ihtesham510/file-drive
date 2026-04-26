@@ -1,0 +1,17 @@
+{
+  "expo": {
+    "scheme": "file-drive",
+    "userInterfaceStyle": "automatic",
+    "orientation": "default",
+    "web": {
+      "bundler": "metro"
+    },
+    "name": "file-drive",
+    "slug": "file-drive",
+    "plugins": ["expo-font"],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}
