@@ -119,12 +119,7 @@ export function RefreshableContent({
 				className='absolute top-0 items-center justify-center gap-2 bg-transparent'
 				style={{ minHeight: THRUST_HOLD }}
 			>
-				<Spinner
-					spin={shouldSpin}
-					style={animatedContentStyle}
-					icon={ReloadIcon}
-					color={iconColor}
-				/>
+				<Spinner icon={ReloadIcon} color={iconColor} />
 			</ThemedView>
 			<ThemedView
 				style={[animatedStyle, props.overallStyle]}

@@ -1,6 +1,9 @@
 {
 	"extends": "@file-drive/config/tsconfig.base.json",
 	"compilerOptions": {
+		"paths": {
+			"@/*": ["./src/*"]
+		},
 		"declaration": true,
 		"declarationMap": true,
 		"sourceMap": true,

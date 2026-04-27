@@ -1,17 +1,20 @@
+import { File } from 'expo-file-system'
 import { Image } from 'expo-image'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Button, FlatList, Pressable } from 'react-native'
 import { useResolveClassNames } from 'uniwind'
 import { Container } from '@/components/common/container'
 import { ThemedText } from '@/components/common/themed-text'
 import { ThemedView } from '@/components/common/themed-view'
+import { useFileUpload } from '@/hooks/use-file-upload'
 import { useFiles } from '@/hooks/use-files'
 
 export default function Page() {
 	const { files, permissionStatus, requestPermission, permissionStatusEnum } =
 		useFiles()
-	const [selectedFiles, setSelectedFiles] = useState<string[]>([])
 	const imageStyles = useResolveClassNames('h-125 w-[90%] rounded-lg')
+	const [uploadState, setSelectedFiles, handleUpload] = useFileUpload({})
+	const selectedFiles = uploadState.uris
 
 	useEffect(() => {
 		if (permissionStatus === permissionStatusEnum.UNDETERMINED) {
@@ -21,8 +24,24 @@ export default function Page() {
 
 	const isDenied = permissionStatus === permissionStatusEnum.DENIED
 
-	function handleUpload() {
-		return
+	if (uploadState.isUploading) {
+		return (
+			<Container className='flex-1 items-center justify-center'>
+				<FlatList
+					data={uploadState.progress}
+					renderItem={({ item }) => {
+						const file = new File(selectedFiles[item.index])
+						return (
+							<ThemedView>
+								<ThemedText>
+									{file.name} - {item.progress ?? 0}
+								</ThemedText>
+							</ThemedView>
+						)
+					}}
+				/>
+			</Container>
+		)
 	}
 
 	if (isDenied) {

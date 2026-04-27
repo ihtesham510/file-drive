@@ -10,12 +10,16 @@
 		"start": "bun run dist/index.mjs"
 	},
 	"dependencies": {
+		"@aws-sdk/client-s3": "^3.1037.0",
+		"@aws-sdk/s3-request-presigner": "^3.1037.0",
 		"@file-drive/api": "workspace:*",
 		"@file-drive/auth": "workspace:*",
 		"@file-drive/db": "workspace:*",
 		"@file-drive/env": "workspace:*",
 		"@hono/trpc-server": "^0.4.0",
+		"@hono/zod-validator": "^0.7.6",
 		"@trpc/server": "catalog:",
+		"drizzle-orm": "catalog:",
 		"better-auth": "catalog:",
 		"dotenv": "catalog:",
 		"hono": "catalog:",

@@ -6,6 +6,7 @@ import { trpcServer } from '@hono/trpc-server'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
+import uploadRoute from './upload'
 
 const app = new Hono()
 
@@ -31,6 +32,8 @@ app.use(
 		},
 	}),
 )
+
+app.route('/upload', uploadRoute)
 
 app.get('/', c => {
 	return c.text('OK')

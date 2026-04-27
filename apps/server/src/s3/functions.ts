@@ -19,21 +19,34 @@ export async function ensureBucket(
 	bucket: string,
 	onCreate?: () => void,
 ) {
-	const exists = bucketExists(client, 'file-drive')
+	const exists = await bucketExists(client, bucket)
 	if (!exists) {
 		await client.send(new CreateBucketCommand({ Bucket: bucket }))
 		onCreate?.()
 	}
 }
 
-export async function uploadFile(
-	userId: string,
-	fileName: string,
-	file: Buffer | Uint8Array,
-	client: S3Client,
-	contentType: string,
-	bucket?: string,
-) {
+export async function uploadFile({
+	userId,
+	fileName,
+	file,
+	client,
+	contentType,
+	bucket,
+}: {
+	userId: string
+	fileName: string
+	file: Buffer | Uint8Array
+	client: S3Client
+	contentType: string
+	bucket?: string
+}) {
+	await ensureBucket(client, bucket ?? 'file-drive')
+	const exits = await bucketExists(client, 'file-drive')
+	if (!exits) {
+		console.log('bucket does not exits')
+		return
+	}
 	const key = `${userId}/${fileName}`
 
 	await client.send(

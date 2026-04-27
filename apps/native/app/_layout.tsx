@@ -8,15 +8,16 @@ import { KeyboardProvider } from 'react-native-keyboard-controller'
 import { useUniwind } from 'uniwind'
 import { AppThemeProvider } from '@/contexts/app-theme-context'
 import { authClient } from '@/lib/auth-client'
-import { queryClient } from '@/utils/trpc'
+import { queryClient } from '@/utils/queryClient'
 
 function StackLayout() {
 	const { theme } = useUniwind()
 	const session = authClient.useSession()
 	const network = useNetworkState()
-	const isConnected = network.isConnected && network.isInternetReachable
+	const isProperlyConnected =
+		!!network.isConnected && !!network.isInternetReachable
 	const isAuthenticated =
-		!session.isPending && !!session.data?.user && !!isConnected
+		!session.isPending && !!session.data?.user && isProperlyConnected
 
 	return (
 		<>
@@ -31,12 +32,10 @@ function StackLayout() {
 				<Stack.Protected guard={isAuthenticated}>
 					<Stack.Screen name='(authenticated)/dashboard' />
 				</Stack.Protected>
-				<Stack.Protected guard={!isConnected}>
+				<Stack.Protected guard={!isProperlyConnected}>
 					<Stack.Screen name='(network)/no-internet' />
 				</Stack.Protected>
-				<Stack.Protected
-					guard={!!network.isConnected && !network.isInternetReachable}
-				>
+				<Stack.Protected guard={!network.isConnected}>
 					<Stack.Screen name='(network)/not-connected' />
 				</Stack.Protected>
 			</Stack>
