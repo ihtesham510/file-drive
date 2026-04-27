@@ -2,6 +2,7 @@ import { createContext } from '@file-drive/api/context'
 import { appRouter } from '@file-drive/api/routers/index'
 import { auth } from '@file-drive/auth'
 import { env } from '@file-drive/env/server'
+import { getS3Client, setPublic } from '@file-drive/s3'
 import { trpcServer } from '@hono/trpc-server'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
@@ -9,6 +10,7 @@ import { logger } from 'hono/logger'
 import uploadRoute from './upload'
 
 const app = new Hono()
+const s3Client = getS3Client()
 
 app.use(logger())
 app.use(
@@ -35,8 +37,14 @@ app.use(
 
 app.route('/upload', uploadRoute)
 
-app.get('/', c => {
-	return c.text('OK')
+app.get('/', async c => {
+	try {
+		await setPublic(s3Client, 'file-drive')
+		console.log('policy is set')
+		return c.text('OK')
+	} catch {
+		return c.text('Error')
+	}
 })
 
 Bun.serve({

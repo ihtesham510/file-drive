@@ -1,30 +1,35 @@
 import { useQuery } from '@tanstack/react-query'
-import { FlatList } from 'react-native'
+import { Image } from 'expo-image'
+import { FlatList, Pressable } from 'react-native'
+import { useResolveClassNames } from 'uniwind'
 import { Container } from '@/components/common/container'
-import { RefreshableContent } from '@/components/common/refreshable-content'
-import { ThemedText } from '@/components/common/themed-text'
-import { ThemedView } from '@/components/common/themed-view'
 import { trpc } from '@/utils/trpc'
 
 export default function Page() {
 	const files = useQuery(trpc.files.list.queryOptions())
+	const imageStyles = useResolveClassNames(
+		'h-125 w-[90%] rounded-lg bg-primary',
+	)
 	return (
 		<Container>
-			<ThemedView className='flex-1 items-center justify-center'>
-				<RefreshableContent>
-					<FlatList
-						data={files.data}
-						keyExtractor={file => file.id}
-						renderItem={({ item }) => {
-							return (
-								<ThemedView>
-									<ThemedText>{item.name}</ThemedText>
-								</ThemedView>
-							)
-						}}
-					/>
-				</RefreshableContent>
-			</ThemedView>
+			<FlatList
+				data={files.data}
+				keyExtractor={file => file.id}
+				renderItem={({ item }) => {
+					const uri = `http://192.168.1.3:7000/file-drive/${item.key}`
+					return (
+						<Pressable className='relative my-4 w-full items-center justify-center'>
+							<Image
+								style={imageStyles}
+								contentFit='cover'
+								source={{
+									uri,
+								}}
+							/>
+						</Pressable>
+					)
+				}}
+			/>
 		</Container>
 	)
 }

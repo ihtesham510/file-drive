@@ -87,6 +87,7 @@
         "@file-drive/auth": "workspace:*",
         "@file-drive/db": "workspace:*",
         "@file-drive/env": "workspace:*",
+        "@file-drive/s3": "workspace:*",
         "@hono/trpc-server": "^0.4.0",
         "@hono/zod-validator": "^0.7.6",
         "@trpc/server": "catalog:",
@@ -209,6 +210,22 @@
       "devDependencies": {
         "@file-drive/config": "workspace:*",
         "@types/bun": "catalog:",
+        "typescript": "^6",
+      },
+    },
+    "packages/s3": {
+      "name": "@file-drive/s3",
+      "dependencies": {
+        "@aws-sdk/client-s3": "^3.1037.0",
+        "@aws-sdk/s3-request-presigner": "^3.1037.0",
+        "@file-drive/env": "workspace:*",
+        "dotenv": "catalog:",
+        "zod": "catalog:",
+      },
+      "devDependencies": {
+        "@file-drive/config": "workspace:*",
+        "@types/pg": "catalog:",
+        "drizzle-kit": "^0.31.8",
         "typescript": "^6",
       },
     },
@@ -711,6 +728,8 @@
     "@file-drive/env": ["@file-drive/env@workspace:packages/env"],
 
     "@file-drive/native": ["@file-drive/native@workspace:apps/native"],
+
+    "@file-drive/s3": ["@file-drive/s3@workspace:packages/s3"],
 
     "@file-drive/ui": ["@file-drive/ui@workspace:packages/ui"],
 

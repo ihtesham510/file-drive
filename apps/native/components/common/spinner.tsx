@@ -2,7 +2,7 @@
 import { Loading02Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon, type IconSvgElement } from '@hugeicons/react-native'
 import { useEffect } from 'react'
-import type { ViewProps } from 'react-native'
+import type { StyleProp, ViewStyle } from 'react-native'
 import Animated, {
 	cancelAnimation,
 	Easing,
@@ -17,8 +17,14 @@ export function Spinner({
 	spin = true,
 	style,
 	color,
+	icon,
 	...rest
-}: { spin?: boolean; icon?: IconSvgElement; color?: string } & ViewProps) {
+}: {
+	spin?: boolean
+	icon?: IconSvgElement
+	color?: string
+	style?: StyleProp<ViewStyle>
+}) {
 	const rotation = useSharedValue(0)
 	const iconColor = useCSSVariable('--color-foreground') as string
 
@@ -34,20 +40,14 @@ export function Spinner({
 		}
 	}, [rotation, spin])
 
-	const animatedStyle = useAnimatedStyle(() => {
-		const externalTransform = Array.isArray(style)
-			? style.flatMap((s: any) => s?.transform ?? [])
-			: ((style as any)?.transform ?? [])
-
-		return {
-			transform: [{ rotate: `${rotation.value}deg` }, ...externalTransform],
-		}
-	})
+	const animatedStyle = useAnimatedStyle(() => ({
+		transform: [{ rotate: `${rotation.value}deg` }],
+	}))
 
 	return (
 		<Animated.View style={[style, animatedStyle]} {...rest}>
 			<HugeiconsIcon
-				icon={rest.icon ?? Loading02Icon}
+				icon={icon ?? Loading02Icon}
 				size={34}
 				color={color ?? iconColor}
 			/>

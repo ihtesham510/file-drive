@@ -1,20 +1,20 @@
 import { db } from '@file-drive/db'
 import { session as sessionTable } from '@file-drive/db/schema/auth'
+import { getS3Client, uploadFile } from '@file-drive/s3'
 import { zValidator } from '@hono/zod-validator'
 import { eq } from 'drizzle-orm'
 import { Hono } from 'hono'
 import z from 'zod'
-import { s3Client } from './s3/client'
-import { uploadFile } from './s3/functions'
+
+const s3Client = getS3Client()
 
 const app = new Hono<{
 	Variables: {
 		userId: string | null
 	}
 }>()
-	.use('*', async (c, next) => {
+	.use('/', async (c, next) => {
 		const token = c.req.header('Authorization')
-		console.log(token)
 		if (!token) return c.json({ error: 'unauthorized' }, 401)
 		const session = (
 			await db
@@ -26,6 +26,7 @@ const app = new Hono<{
 		c.set('userId', session?.userId ?? null)
 		return await next()
 	})
+
 	.post(
 		'/',
 		zValidator(
@@ -36,7 +37,6 @@ const app = new Hono<{
 			}),
 		),
 		async c => {
-			console.log(c.req.raw)
 			const userId = c.get('userId')
 			if (!userId) {
 				return c.json({ error: 'unauthorized' }, 401)
@@ -51,6 +51,7 @@ const app = new Hono<{
 				file,
 				client,
 				userId,
+				bucket: 'file-drive',
 			})
 			return c.json({ key })
 		},

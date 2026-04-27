@@ -41,6 +41,10 @@
 		"db:watch": "turbo -F @file-drive/db db:watch",
 		"db:stop": "turbo -F @file-drive/db db:stop",
 		"db:down": "turbo -F @file-drive/db db:down",
+		"s3:start": "turbo -F @file-drive/s3 s3:start",
+		"s3:watch": "turbo -F @file-drive/s3 s3:watch",
+		"s3:stop": "turbo -F @file-drive/s3 s3:stop",
+		"s3:down": "turbo -F @file-drive/s3 s3:down",
 		"check": "biome check --write .",
 		"prepare": "husky"
 	},
