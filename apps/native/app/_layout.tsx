@@ -14,7 +14,6 @@ function StackLayout() {
 	const isConnected = network.isConnected && network.isInternetReachable
 	const isAuthenticated =
 		!session.isPending && !!session.data?.user && !!isConnected
-	console.log(isAuthenticated)
 
 	return (
 		<Stack screenOptions={{ headerShown: false }}>
