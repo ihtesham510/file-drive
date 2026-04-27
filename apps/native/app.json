@@ -10,6 +10,7 @@
 		"slug": "file-drive",
 		"plugins": [
 			"expo-font",
+			"expo-image",
 			[
 				"expo-media-library",
 				{

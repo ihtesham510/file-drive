@@ -1,52 +1,31 @@
 import type { PropsWithChildren } from 'react'
-import {
-	ScrollView,
-	type ScrollViewProps,
-	View,
-	type ViewProps,
-} from 'react-native'
-import Animated, { type AnimatedProps } from 'react-native-reanimated'
+import type { ViewProps } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { ThemedView } from '@/components/common/themed-view'
 import { cn } from '@/lib/utils'
 
-const AnimatedView = Animated.createAnimatedComponent(View)
-
-type Props = AnimatedProps<ViewProps> & {
-	className?: string
-	isScrollable?: boolean
-	scrollViewProps?: Omit<ScrollViewProps, 'contentContainerStyle'>
+interface Props extends ViewProps {
+	bottom?: boolean
+	top?: boolean
 }
-
 export function Container({
 	children,
-	className,
-	isScrollable = true,
-	scrollViewProps,
+	top = true,
+	bottom = false,
 	...props
 }: PropsWithChildren<Props>) {
 	const insets = useSafeAreaInsets()
 
 	return (
-		<AnimatedView
-			className={cn('flex-1 bg-background', className)}
+		<ThemedView
+			className={cn('flex-1 bg-background', props.className)}
 			style={{
-				paddingBottom: insets.bottom,
-				paddingTop: insets.top,
+				paddingTop: top ? insets.top : 0,
+				paddingBottom: bottom ? insets.bottom : 0,
 			}}
 			{...props}
 		>
-			{isScrollable ? (
-				<ScrollView
-					contentContainerStyle={{ flexGrow: 1 }}
-					keyboardShouldPersistTaps='handled'
-					contentInsetAdjustmentBehavior='automatic'
-					{...scrollViewProps}
-				>
-					{children}
-				</ScrollView>
-			) : (
-				<View className='flex-1'>{children}</View>
-			)}
-		</AnimatedView>
+			{children}
+		</ThemedView>
 	)
 }
