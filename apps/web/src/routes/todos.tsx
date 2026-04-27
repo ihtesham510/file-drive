@@ -11,7 +11,7 @@ import { Input } from '@file-drive/ui/components/input'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { Loader2, Trash2 } from 'lucide-react'
-import { useState, type FormEvent } from 'react'
+import { type FormEvent, useState } from 'react'
 
 import { trpc } from '@/utils/trpc'
 
