@@ -56,6 +56,7 @@ export function SignUp() {
 		control,
 		handleSubmit,
 		formState: { errors, isSubmitting },
+		reset,
 	} = useForm<SignUpFormValues>({
 		resolver: zodResolver(schema),
 		defaultValues: {
@@ -67,49 +68,54 @@ export function SignUp() {
 	})
 
 	const onSubmit = async (data: SignUpFormValues) => {
-		await authClient.signUp.email({
+		const { error } = await authClient.signUp.email({
 			email: data.email,
 			name: data.name,
 			password: data.password,
 		})
+		if (error) {
+			console.error('error while signing up', error)
+			return
+		}
+		reset()
 	}
 
 	return (
-		<ThemedView className="flex-1">
+		<ThemedView className='flex-1'>
 			<StyledKeyboardAwareScrollView
-				className="flex-1 bg-background"
+				className='flex-1 bg-background'
 				style={{ marginTop: safeAreaInsets.top }}
-				keyboardShouldPersistTaps="handled"
+				keyboardShouldPersistTaps='handled'
 				bottomOffset={80}
 				contentContainerStyle={{ flexGrow: 1 }}
 			>
-				<ThemedView className="flex-1 items-center justify-center px-6">
-					<ThemedView className="mb-8 w-full">
-						<ThemedText varient="semiBold" className="mb-1 text-3xl">
+				<ThemedView className='flex-1 items-center justify-center px-6'>
+					<ThemedView className='mb-8 w-full'>
+						<ThemedText varient='semiBold' className='mb-1 text-3xl'>
 							Create account
 						</ThemedText>
-						<ThemedText className="text-muted-foreground text-sm">
+						<ThemedText className='text-muted-foreground text-sm'>
 							Fill in the details below to get started
 						</ThemedText>
 					</ThemedView>
 
-					<ThemedView className="w-full gap-5">
-						<ThemedView className="gap-1.5">
-							<ThemedText varient="semiBold" className="text-sm">
+					<ThemedView className='w-full gap-5'>
+						<ThemedView className='gap-1.5'>
+							<ThemedText varient='semiBold' className='text-sm'>
 								Email
 							</ThemedText>
 							<Controller
 								control={control}
-								name="email"
+								name='email'
 								render={({ field: { onChange, onBlur, value } }) => (
 									<StyledTextInput
-										className="rounded-xl border border-border bg-input px-4 py-3 text-foreground"
-										placeholder="you@example.com"
+										className='rounded-xl border border-border bg-input px-4 py-3 text-foreground'
+										placeholder='you@example.com'
 										placeholderTextColor={placeHolderColor}
-										keyboardType="email-address"
-										autoCapitalize="none"
+										keyboardType='email-address'
+										autoCapitalize='none'
 										autoCorrect={false}
-										returnKeyType="next"
+										returnKeyType='next'
 										onSubmitEditing={() => passwordRef.current?.focus()}
 										onBlur={onBlur}
 										onChangeText={onChange}
@@ -118,27 +124,27 @@ export function SignUp() {
 								)}
 							/>
 							{errors.email && (
-								<ThemedText className="mt-0.5 text-destructive text-xs">
+								<ThemedText className='mt-0.5 text-destructive text-xs'>
 									{errors.email.message}
 								</ThemedText>
 							)}
 						</ThemedView>
-						<ThemedView className="gap-1.5">
-							<ThemedText varient="semiBold" className="text-sm">
+						<ThemedView className='gap-1.5'>
+							<ThemedText varient='semiBold' className='text-sm'>
 								Name
 							</ThemedText>
 							<Controller
 								control={control}
-								name="name"
+								name='name'
 								render={({ field: { onChange, onBlur, value } }) => (
 									<StyledTextInput
-										className="rounded-xl border border-border bg-input px-4 py-3 text-foreground"
-										placeholder="you@example.com"
+										className='rounded-xl border border-border bg-input px-4 py-3 text-foreground'
+										placeholder='you@example.com'
 										placeholderTextColor={placeHolderColor}
-										keyboardType="email-address"
-										autoCapitalize="none"
+										keyboardType='email-address'
+										autoCapitalize='none'
 										autoCorrect={false}
-										returnKeyType="next"
+										returnKeyType='next'
 										onSubmitEditing={() => passwordRef.current?.focus()}
 										onBlur={onBlur}
 										onChangeText={onChange}
@@ -147,30 +153,30 @@ export function SignUp() {
 								)}
 							/>
 							{errors.name && (
-								<ThemedText className="mt-0.5 text-destructive text-xs">
+								<ThemedText className='mt-0.5 text-destructive text-xs'>
 									{errors.name.message}
 								</ThemedText>
 							)}
 						</ThemedView>
 
-						<ThemedView className="gap-1.5">
-							<ThemedText varient="semiBold" className="text-sm">
+						<ThemedView className='gap-1.5'>
+							<ThemedText varient='semiBold' className='text-sm'>
 								Password
 							</ThemedText>
-							<ThemedView className="relative">
+							<ThemedView className='relative'>
 								<Controller
 									control={control}
-									name="password"
+									name='password'
 									render={({ field: { onChange, onBlur, value } }) => (
 										<StyledTextInput
 											ref={passwordRef}
-											className="rounded-xl border border-border bg-input px-4 py-3 pr-12 text-foreground"
-											placeholder="••••••••"
+											className='rounded-xl border border-border bg-input px-4 py-3 pr-12 text-foreground'
+											placeholder='••••••••'
 											placeholderTextColor={placeHolderColor}
 											secureTextEntry={!showPassword}
-											autoCapitalize="none"
+											autoCapitalize='none'
 											autoCorrect={false}
-											returnKeyType="next"
+											returnKeyType='next'
 											onSubmitEditing={() =>
 												confirmPasswordRef.current?.focus()
 											}
@@ -181,7 +187,7 @@ export function SignUp() {
 									)}
 								/>
 								<Pressable
-									className="absolute top-0 right-3 bottom-0 justify-center px-1"
+									className='absolute top-0 right-3 bottom-0 justify-center px-1'
 									onPress={() => setShowPassword(v => !v)}
 								>
 									<HugeiconsIcon
@@ -191,31 +197,31 @@ export function SignUp() {
 								</Pressable>
 							</ThemedView>
 							{errors.password && (
-								<ThemedText className="mt-0.5 text-destructive text-xs">
+								<ThemedText className='mt-0.5 text-destructive text-xs'>
 									{errors.password.message}
 								</ThemedText>
 							)}
 						</ThemedView>
 
 						{/* ── Confirm Password ── */}
-						<ThemedView className="gap-1.5">
-							<ThemedText varient="semiBold" className="text-sm">
+						<ThemedView className='gap-1.5'>
+							<ThemedText varient='semiBold' className='text-sm'>
 								Confirm Password
 							</ThemedText>
-							<ThemedView className="relative">
+							<ThemedView className='relative'>
 								<Controller
 									control={control}
-									name="confirmPassword"
+									name='confirmPassword'
 									render={({ field: { onChange, onBlur, value } }) => (
 										<StyledTextInput
 											ref={confirmPasswordRef}
-											className="rounded-xl border border-border bg-input px-4 py-3 pr-12 text-foreground"
-											placeholder="••••••••"
+											className='rounded-xl border border-border bg-input px-4 py-3 pr-12 text-foreground'
+											placeholder='••••••••'
 											placeholderTextColor={placeHolderColor}
 											secureTextEntry={!showConfirmPassword}
-											autoCapitalize="none"
+											autoCapitalize='none'
 											autoCorrect={false}
-											returnKeyType="done"
+											returnKeyType='done'
 											onSubmitEditing={handleSubmit(onSubmit)}
 											onBlur={onBlur}
 											onChangeText={onChange}
@@ -224,7 +230,7 @@ export function SignUp() {
 									)}
 								/>
 								<Pressable
-									className="absolute top-0 right-3 bottom-0 justify-center px-1"
+									className='absolute top-0 right-3 bottom-0 justify-center px-1'
 									onPress={() => setShowConfirmPassword(v => !v)}
 								>
 									<HugeiconsIcon
@@ -234,14 +240,14 @@ export function SignUp() {
 								</Pressable>
 							</ThemedView>
 							{errors.confirmPassword && (
-								<ThemedText className="mt-0.5 text-destructive text-xs">
+								<ThemedText className='mt-0.5 text-destructive text-xs'>
 									{errors.confirmPassword.message}
 								</ThemedText>
 							)}
 						</ThemedView>
 
 						<Pressable
-							className="mt-2 items-center rounded-xl bg-primary py-3.5"
+							className='mt-2 items-center rounded-xl bg-primary py-3.5'
 							onPress={handleSubmit(onSubmit)}
 							disabled={isSubmitting}
 						>
@@ -249,8 +255,8 @@ export function SignUp() {
 								<Spinner size={18} />
 							) : (
 								<ThemedText
-									varient="semiBold"
-									className="text-base text-primary-foreground"
+									varient='semiBold'
+									className='text-base text-primary-foreground'
 								>
 									Create account
 								</ThemedText>
@@ -259,12 +265,12 @@ export function SignUp() {
 					</ThemedView>
 
 					{/* Footer */}
-					<ThemedView className="mt-8 flex-row gap-1">
-						<ThemedText className="text-muted-foreground text-sm">
+					<ThemedView className='mt-8 flex-row gap-1'>
+						<ThemedText className='text-muted-foreground text-sm'>
 							Already have an account?
 						</ThemedText>
 						<Pressable onPress={() => router.replace('/sign-in')}>
-							<ThemedText varient="semiBold" className="text-primary text-sm">
+							<ThemedText varient='semiBold' className='text-primary text-sm'>
 								Sign in
 							</ThemedText>
 						</Pressable>
