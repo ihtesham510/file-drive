@@ -116,7 +116,7 @@ export function RefreshableContent({
 			style={[props.overallStyle]}
 		>
 			<ThemedView
-				className="absolute top-0 items-center justify-center gap-2 bg-transparent"
+				className='absolute top-0 items-center justify-center gap-2 bg-transparent'
 				style={{ minHeight: THRUST_HOLD }}
 			>
 				<Spinner

@@ -19,15 +19,15 @@ export function ThemeToggle() {
 				}
 				toggleTheme()
 			}}
-			className="px-2.5"
+			className='px-2.5'
 		>
 			{isLight ? (
-				<Animated.View key="moon" entering={ZoomIn} exiting={FadeOut}>
-					<StyledIonicons name="moon" size={20} className="text-foreground" />
+				<Animated.View key='moon' entering={ZoomIn} exiting={FadeOut}>
+					<StyledIonicons name='moon' size={20} className='text-foreground' />
 				</Animated.View>
 			) : (
-				<Animated.View key="sun" entering={ZoomIn} exiting={FadeOut}>
-					<StyledIonicons name="sunny" size={20} className="text-foreground" />
+				<Animated.View key='sun' entering={ZoomIn} exiting={FadeOut}>
+					<StyledIonicons name='sunny' size={20} className='text-foreground' />
 				</Animated.View>
 			)}
 		</Pressable>

@@ -37,14 +37,14 @@ export function Container({
 			{isScrollable ? (
 				<ScrollView
 					contentContainerStyle={{ flexGrow: 1 }}
-					keyboardShouldPersistTaps="handled"
-					contentInsetAdjustmentBehavior="automatic"
+					keyboardShouldPersistTaps='handled'
+					contentInsetAdjustmentBehavior='automatic'
 					{...scrollViewProps}
 				>
 					{children}
 				</ScrollView>
 			) : (
-				<View className="flex-1">{children}</View>
+				<View className='flex-1'>{children}</View>
 			)}
 		</AnimatedView>
 	)
