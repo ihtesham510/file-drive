@@ -26,6 +26,7 @@
 	},
 	"type": "module",
 	"scripts": {
+		"start-services": "bun db:start && bun s3:start",
 		"dev": "turbo dev",
 		"build": "turbo build",
 		"check-types": "turbo check-types",
