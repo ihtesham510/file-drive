@@ -139,9 +139,7 @@ export function SignUp() {
 								render={({ field: { onChange, onBlur, value } }) => (
 									<StyledTextInput
 										className='rounded-xl border border-border bg-input px-4 py-3 text-foreground'
-										placeholder='you@example.com'
-										placeholderTextColor={placeHolderColor}
-										keyboardType='email-address'
+										keyboardType='default'
 										autoCapitalize='none'
 										autoCorrect={false}
 										returnKeyType='next'
