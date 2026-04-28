@@ -14,6 +14,9 @@ export function ScrollList<T>(props: Props<T>) {
 		<RefreshableContent {...props.refreshableContentProps} shouldPan={isOnTop}>
 			<FlatList
 				{...props}
+				overScrollMode='never'
+				bounces={false}
+				scrollEventThrottle={16}
 				onScroll={e => {
 					setIsOnTop(e.nativeEvent.contentOffset.y === 0)
 					props.onScroll?.(e)

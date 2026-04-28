@@ -1,18 +1,36 @@
-import { ReloadIcon } from '@hugeicons/core-free-icons'
-import { type PropsWithChildren, useEffect, useRef, useState } from 'react'
+import { Loading02Icon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react-native'
+import {
+	type PropsWithChildren,
+	type Ref,
+	useCallback,
+	useEffect,
+	useImperativeHandle,
+	useRef,
+	useState,
+} from 'react'
 import { PanResponder, type ViewProps, type ViewStyle } from 'react-native'
 import {
+	cancelAnimation,
+	Easing,
 	interpolate,
 	useAnimatedStyle,
 	useSharedValue,
+	withRepeat,
 	withSpring,
+	withTiming,
 } from 'react-native-reanimated'
 import { useCSSVariable } from 'uniwind'
-import { Spinner } from '@/components/common/spinner'
 import { ThemedView } from '@/components/common/themed-view'
 import { cn } from '@/lib/utils'
 
+export interface RefreshableContentHandle {
+	addPan: (dy: number) => void
+	releasePan: () => Promise<void>
+}
+
 export interface RefreshableContentProps extends PropsWithChildren {
+	ref?: Ref<RefreshableContentHandle>
 	onReload?: () => Promise<void>
 	innerContainerProps?: ViewProps
 	outerContainerProps?: ViewProps
@@ -27,19 +45,88 @@ export function RefreshableContent({
 	maxPan = 200,
 	thrustHold = 120,
 	shouldPan = true,
+	ref,
 	...props
 }: RefreshableContentProps) {
 	const MAX_PAN = maxPan
 	const THRUST_HOLD = thrustHold
+
 	const panY = useSharedValue(0)
 	const hasReleased = useSharedValue(false)
-	const spin = useSharedValue(false)
-	const [shouldSpin, setShouldSpin] = useState(false)
+	const rotation = useSharedValue(0)
+	const isSpinning = useSharedValue(0)
+
+	const [isSpin, setIsSpin] = useState(false)
+
 	const shouldPanRef = useRef(shouldPan)
+	const isReloading = useRef(false)
+	const onReloadRef = useRef(props.onReload)
 
 	useEffect(() => {
 		shouldPanRef.current = shouldPan
 	}, [shouldPan])
+
+	useEffect(() => {
+		onReloadRef.current = props.onReload
+	}, [props.onReload])
+
+	const resetPan = useCallback(() => {
+		isReloading.current = false
+		hasReleased.value = true
+		isSpinning.value = 0
+		panY.value = withSpring(0, { duration: 280 })
+		setIsSpin(false)
+	}, [hasReleased, isSpinning, panY])
+
+	const setToThrustHold = useCallback(() => {
+		hasReleased.value = true
+		isSpinning.value = 1
+		panY.value = withSpring(THRUST_HOLD, { duration: 280 })
+		setIsSpin(true)
+	}, [hasReleased, isSpinning, panY, THRUST_HOLD])
+
+	const triggerReload = useCallback(async () => {
+		if (isReloading.current) return
+		isReloading.current = true
+		setToThrustHold()
+		await new Promise<void>(res => setTimeout(res, 900))
+		try {
+			await onReloadRef.current?.()
+		} catch (err) {
+			console.log(err)
+		} finally {
+			resetPan()
+		}
+	}, [setToThrustHold, resetPan])
+
+	useImperativeHandle(
+		ref,
+		() => ({
+			addPan(dy: number) {
+				if (isReloading.current) return
+				hasReleased.value = false
+				isSpinning.value = 0
+				panY.value = Math.min(Math.max(0, dy), MAX_PAN)
+			},
+			async releasePan() {
+				if (isReloading.current) return
+				if (panY.value >= THRUST_HOLD) {
+					await triggerReload()
+				} else {
+					resetPan()
+				}
+			},
+		}),
+		[
+			hasReleased,
+			isSpinning,
+			panY,
+			MAX_PAN,
+			THRUST_HOLD,
+			triggerReload,
+			resetPan,
+		],
+	)
 
 	const panHandlers = useRef(
 		PanResponder.create({
@@ -47,24 +134,20 @@ export function RefreshableContent({
 				return shouldPanRef.current && gestureState.dy > 0
 			},
 			onPanResponderGrant() {
+				if (isReloading.current) return
 				hasReleased.value = false
+				isSpinning.value = 0
 			},
 			onPanResponderMove(_e, gestureState) {
+				if (isReloading.current) return
 				if (gestureState.dy < MAX_PAN) {
 					panY.value = Math.max(0, gestureState.dy)
 				}
 			},
 			async onPanResponderRelease() {
+				if (isReloading.current) return
 				if (panY.value >= THRUST_HOLD) {
-					setToThrustHold()
-					await new Promise(res => setTimeout(res, 900))
-					try {
-						await props.onReload?.()
-					} catch (_err) {
-						console.log(_err)
-					} finally {
-						resetPan()
-					}
+					await triggerReload()
 				} else {
 					resetPan()
 				}
@@ -72,43 +155,50 @@ export function RefreshableContent({
 		}),
 	).current
 
-	function resetPan() {
-		hasReleased.value = true
-		panY.value = withSpring(0, { duration: 280 })
-		spin.value = false
-		setShouldSpin(false)
-	}
-
-	function setToThrustHold() {
-		hasReleased.value = true
-		spin.value = true
-		setShouldSpin(true)
-		panY.value = withSpring(THRUST_HOLD, { duration: 280 })
-	}
+	useEffect(() => {
+		if (isSpin) {
+			rotation.value = withRepeat(
+				withTiming(360, { duration: 1000, easing: Easing.linear }),
+				-1,
+			)
+		} else {
+			cancelAnimation(rotation)
+			rotation.value = 0
+		}
+	}, [rotation, isSpin])
 
 	const animatedStyle = useAnimatedStyle(() => ({
-		transform: [
-			{
-				translateY: panY.value,
-			},
-		],
-	}))
-
-	const animatedContentStyle = useAnimatedStyle(() => ({
-		opacity: panY.value / 100,
-		transform: [
-			{
-				translateY: interpolate(panY.value, [0, THRUST_HOLD], [-35, 0]),
-			},
-		],
+		transform: [{ translateY: panY.value }],
 	}))
 
 	const iconColor = useCSSVariable('--color-foreground') as string
 
+	const animatedIconContainerStyle = useAnimatedStyle(() => ({
+		opacity: panY.value / 100,
+		transform: [
+			{
+				translateY: interpolate(
+					panY.value,
+					[0, THRUST_HOLD],
+					[-THRUST_HOLD / 1.5, 0],
+				),
+			},
+		],
+	}))
+
+	const animatedIconStyle = useAnimatedStyle(() => {
+		const dragRotation = interpolate(panY.value, [0, THRUST_HOLD], [0, 360])
+		const currentRotation =
+			isSpinning.value === 0 ? dragRotation : rotation.value
+		return {
+			transform: [{ rotate: `${currentRotation}deg` }],
+		}
+	})
+
 	return (
 		<ThemedView
 			className={cn(
-				'relative flex-1 items-center justify-center bg-background', // add flex-1 here
+				'relative flex-1 items-center justify-center bg-background',
 				props.outerContainerProps?.className,
 				props.overallclassName,
 			)}
@@ -119,7 +209,19 @@ export function RefreshableContent({
 				className='absolute top-0 items-center justify-center gap-2 bg-transparent'
 				style={{ minHeight: THRUST_HOLD }}
 			>
-				<Spinner icon={ReloadIcon} color={iconColor} />
+				<ThemedView
+					animated
+					className='bg-transparent'
+					style={animatedIconContainerStyle}
+				>
+					<ThemedView
+						animated
+						className='m-0 rounded-full p-0'
+						style={animatedIconStyle}
+					>
+						<HugeiconsIcon icon={Loading02Icon} size={28} color={iconColor} />
+					</ThemedView>
+				</ThemedView>
 			</ThemedView>
 			<ThemedView
 				style={[animatedStyle, props.overallStyle]}

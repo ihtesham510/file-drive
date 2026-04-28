@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 import { Image } from 'expo-image'
-import { FlatList, Pressable } from 'react-native'
+import { Pressable } from 'react-native'
 import { useResolveClassNames } from 'uniwind'
 import { Container } from '@/components/common/container'
+import { ScrollList } from '@/components/common/scroll-list'
 import { trpc } from '@/utils/trpc'
 
 export default function Page() {
@@ -12,11 +13,14 @@ export default function Page() {
 	)
 	return (
 		<Container>
-			<FlatList
-				data={files.data}
+			<ScrollList
+				data={files.data?.reverse()}
+				onScroll={e => e.nativeEvent.contentOffset.y === 0}
+				showsVerticalScrollIndicator={false}
 				keyExtractor={file => file.id}
 				renderItem={({ item }) => {
-					const uri = `http://192.168.1.3:7000/file-drive/${item.key}`
+					const uri = `https://36e9-2400-adc7-1950-7000-b40e-5cc9-a524-f6c5.ngrok-free.app/file-drive/${item.key}`
+					console.log(uri)
 					return (
 						<Pressable className='relative my-4 w-full items-center justify-center'>
 							<Image
