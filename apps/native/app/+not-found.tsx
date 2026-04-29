@@ -17,7 +17,7 @@ export default function NotFoundScreen() {
 						<Text className='mb-4 text-center text-muted text-sm'>
 							The page you're looking for doesn't exist.
 						</Text>
-						<Link href='/' asChild>
+						<Link href='/sign-in' asChild>
 							<Text>Go Home</Text>
 						</Link>
 					</View>
