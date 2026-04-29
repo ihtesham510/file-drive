@@ -4,6 +4,7 @@ import * as schema from '@file-drive/db/schema/auth'
 import { env } from '@file-drive/env/server'
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
+import { organization } from 'better-auth/plugins'
 
 export function createAuth() {
 	const db = createDb()
@@ -38,7 +39,7 @@ export function createAuth() {
 				httpOnly: true,
 			},
 		},
-		plugins: [expo()],
+		plugins: [expo(), organization()],
 	})
 }
 

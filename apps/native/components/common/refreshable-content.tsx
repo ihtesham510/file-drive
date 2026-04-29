@@ -62,14 +62,6 @@ export function RefreshableContent({
 	const isReloading = useRef(false)
 	const onReloadRef = useRef(props.onReload)
 
-	useEffect(() => {
-		shouldPanRef.current = shouldPan
-	}, [shouldPan])
-
-	useEffect(() => {
-		onReloadRef.current = props.onReload
-	}, [props.onReload])
-
 	const resetPan = useCallback(() => {
 		isReloading.current = false
 		hasReleased.value = true
@@ -98,6 +90,15 @@ export function RefreshableContent({
 			resetPan()
 		}
 	}, [setToThrustHold, resetPan])
+
+	useEffect(() => {
+		shouldPanRef.current = shouldPan
+		resetPan()
+	}, [shouldPan, resetPan])
+
+	useEffect(() => {
+		onReloadRef.current = props.onReload
+	}, [props.onReload])
 
 	useImperativeHandle(
 		ref,

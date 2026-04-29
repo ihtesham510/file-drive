@@ -19,7 +19,7 @@ export default function TabLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name='media'
+				name='favorites'
 				options={{
 					title: 'Media',
 					tabBarIcon: ({ color }) => (

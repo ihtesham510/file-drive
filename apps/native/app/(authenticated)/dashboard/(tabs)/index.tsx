@@ -17,12 +17,13 @@ export default function Page() {
 				data={files.data?.reverse()}
 				onScroll={e => e.nativeEvent.contentOffset.y === 0}
 				showsVerticalScrollIndicator={false}
+				contentContainerClassName='gap-4'
 				keyExtractor={file => file.id}
 				renderItem={({ item }) => {
-					const uri = `https://36e9-2400-adc7-1950-7000-b40e-5cc9-a524-f6c5.ngrok-free.app/file-drive/${item.key}`
+					const uri = `https://f80b-2400-adc7-1950-7000-eca3-b772-d7c0-dbdd.ngrok-free.app/file-drive/${item.key}`
 					console.log(uri)
 					return (
-						<Pressable className='relative my-4 w-full items-center justify-center'>
+						<Pressable className='relative w-full items-center justify-center'>
 							<Image
 								style={imageStyles}
 								contentFit='cover'
