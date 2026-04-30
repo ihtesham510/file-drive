@@ -7,6 +7,7 @@ import { trpcServer } from '@hono/trpc-server'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
+import proxyRoute from './proxy'
 import uploadRoute from './upload'
 
 const app = new Hono()
@@ -36,6 +37,7 @@ app.use(
 )
 
 app.route('/upload', uploadRoute)
+app.route('/file-drive', proxyRoute)
 
 app.get('/', async c => {
 	try {
