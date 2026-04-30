@@ -1,4 +1,5 @@
 import '@/global.css'
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { useNetworkState } from 'expo-network'
 import { Stack } from 'expo-router'
@@ -48,9 +49,11 @@ export default function Layout() {
 		<QueryClientProvider client={queryClient}>
 			<GestureHandlerRootView style={{ flex: 1 }}>
 				<KeyboardProvider>
-					<AppThemeProvider>
-						<StackLayout />
-					</AppThemeProvider>
+					<BottomSheetModalProvider>
+						<AppThemeProvider>
+							<StackLayout />
+						</AppThemeProvider>
+					</BottomSheetModalProvider>
 				</KeyboardProvider>
 			</GestureHandlerRootView>
 		</QueryClientProvider>
