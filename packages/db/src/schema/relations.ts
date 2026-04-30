@@ -1,6 +1,7 @@
 import { relations } from 'drizzle-orm'
 import { account, session, user } from './auth'
 import { file } from './files'
+import { invitation, member, organization } from './organization'
 
 export const fileRelations = relations(file, ({ one }) => ({
 	user: one(user, { fields: [file.user], references: [user.id] }),
@@ -23,6 +24,34 @@ export const sessionRelations = relations(session, ({ one }) => ({
 export const accountRelations = relations(account, ({ one }) => ({
 	user: one(user, {
 		fields: [account.userId],
+		references: [user.id],
+	}),
+}))
+
+/*-------------organiszation Relations-------------*/
+export const organizationRelations = relations(organization, ({ many }) => ({
+	members: many(member),
+	invitations: many(invitation),
+}))
+
+export const memberRelations = relations(member, ({ one }) => ({
+	organization: one(organization, {
+		fields: [member.organizationId],
+		references: [organization.id],
+	}),
+	user: one(user, {
+		fields: [member.userId],
+		references: [user.id],
+	}),
+}))
+
+export const invitationRelations = relations(invitation, ({ one }) => ({
+	organization: one(organization, {
+		fields: [invitation.organizationId],
+		references: [organization.id],
+	}),
+	user: one(user, {
+		fields: [invitation.inviterId],
 		references: [user.id],
 	}),
 }))
