@@ -4,6 +4,8 @@ import {
 	Search01Icon,
 	Settings04Icon,
 	SharedDriveIcon,
+	StarIcon,
+	WasteIcon,
 } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react-native'
 import { Drawer } from 'expo-router/drawer'
@@ -44,12 +46,22 @@ export default function DrawerLayout() {
 				}}
 			/>
 			<Drawer.Screen
-				name='(tabs)'
+				name='files'
 				options={{
 					title: 'Files',
 					drawerLabel: 'Files',
 					drawerIcon: ({ size, color }) => (
 						<HugeiconsIcon size={size} color={color} icon={Files01Icon} />
+					),
+				}}
+			/>
+			<Drawer.Screen
+				name='favorites'
+				options={{
+					title: 'Favorites',
+					drawerLabel: 'Favorites',
+					drawerIcon: ({ size, color }) => (
+						<HugeiconsIcon size={size} color={color} icon={StarIcon} />
 					),
 				}}
 			/>
@@ -60,6 +72,16 @@ export default function DrawerLayout() {
 					drawerLabel: 'Shared',
 					drawerIcon: ({ size, color }) => (
 						<HugeiconsIcon size={size} color={color} icon={SharedDriveIcon} />
+					),
+				}}
+			/>
+			<Drawer.Screen
+				name='trash'
+				options={{
+					title: 'Trash',
+					drawerLabel: 'Trash',
+					drawerIcon: ({ size, color }) => (
+						<HugeiconsIcon size={size} color={color} icon={WasteIcon} />
 					),
 				}}
 			/>

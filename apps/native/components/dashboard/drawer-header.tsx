@@ -1,72 +1,41 @@
-import {
-	Menu02Icon,
-	Notification02Icon,
-	Search01Icon,
-} from '@hugeicons/core-free-icons'
+import { Menu02Icon, Notification02Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react-native'
 import type { DrawerHeaderProps } from '@react-navigation/drawer'
-import { Link, router } from 'expo-router'
-import { Pressable, TextInput } from 'react-native'
-import {
-	SlideInDown,
-	SlideInUp,
-	SlideOutDown,
-	SlideOutUp,
-} from 'react-native-reanimated'
+import { Image } from 'expo-image'
+import { Link } from 'expo-router'
+import { Pressable } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useCSSVariable } from 'uniwind'
+import { useResolveClassNames } from 'uniwind'
+
 import { ThemedText } from '@/components/common/themed-text'
 import { ThemedView } from '@/components/common/themed-view'
+import { authClient } from '@/lib/auth-client'
 
 export function DrawerHeader(props: DrawerHeaderProps) {
-	const isSearch = props.route.name === 'search'
-	const iconColor = useCSSVariable('--color-muted-foreground') as string
 	const insets = useSafeAreaInsets()
+	const { data } = authClient.useSession()
+	const imageStyle = useResolveClassNames('size-8 rounded-full absolute')
 	return (
 		<ThemedView style={{ marginTop: insets.top }}>
-			{isSearch ? (
-				<ThemedView
-					key='search-header'
-					animated
-					className='h-auto flex-row items-center justify-between bg-transparent p-4'
-					entering={SlideInUp}
-					exiting={SlideOutUp}
-				>
-					<ThemedView className='flex-1 flex-row items-center justify-start gap-1 rounded-lg bg-input px-4'>
-						<HugeiconsIcon icon={Search01Icon} size={18} color={iconColor} />
-						<TextInput placeholder='search folder or files' />
-					</ThemedView>
-					<Pressable
-						className='ml-4 bg-transparent'
-						onPress={() => router.push('/dashboard')}
-					>
-						<ThemedText className='text-bold'>Cancel</ThemedText>
-					</Pressable>
-				</ThemedView>
-			) : (
-				<ThemedView
-					key='normal-header'
-					animated
-					className='h-auto flex-row items-center justify-between bg-transparent p-4'
-					entering={SlideInDown}
-					exiting={SlideOutDown}
-				>
-					<ThemedView className='flex-row gap-4'>
-						<Pressable onPress={props.navigation.toggleDrawer}>
-							<HugeiconsIcon icon={Menu02Icon} size={28} />
-						</Pressable>
-						<ThemedText varient='title'>{props.options.title}</ThemedText>
-					</ThemedView>
-					<ThemedView className='flex-row gap-4'>
-						<Link href='/dashboard/search'>
-							<HugeiconsIcon icon={Search01Icon} size={28} />
-						</Link>
-						<Link href='/dashboard/notifications'>
-							<HugeiconsIcon icon={Notification02Icon} size={28} />
-						</Link>
+			<ThemedView className='h-auto flex-row items-center justify-between p-4'>
+				<Pressable onPress={props.navigation.toggleDrawer} className='p-1'>
+					<HugeiconsIcon icon={Menu02Icon} size={28} />
+				</Pressable>
+				<ThemedView className='flex-row items-center gap-4'>
+					<Link href='/dashboard/notifications' className='p-1'>
+						<HugeiconsIcon icon={Notification02Icon} size={28} />
+					</Link>
+					<ThemedView className='relative size-12 items-center justify-center rounded-full bg-input/30'>
+						<ThemedText className='font-bold text-xl'>{`${data?.user.name[0]}${data?.user.name[1]}`}</ThemedText>
+						<Image
+							style={imageStyle}
+							source={{
+								uri: data?.user.image ?? undefined,
+							}}
+						/>
 					</ThemedView>
 				</ThemedView>
-			)}
+			</ThemedView>
 		</ThemedView>
 	)
 }

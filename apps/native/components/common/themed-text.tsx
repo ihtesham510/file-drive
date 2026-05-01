@@ -25,5 +25,5 @@ const varients = {
 	default: 'leading-8',
 	bold: 'font-bold leading-8',
 	semiBold: 'fold-semibold leading-8',
-	title: 'text-2xl font-bold',
+	title: 'text-3xl font-bold',
 }
