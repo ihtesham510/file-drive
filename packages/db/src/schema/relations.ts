@@ -1,10 +1,21 @@
 import { relations } from 'drizzle-orm'
 import { account, session, user } from './auth'
+import { favorites } from './favorites'
 import { file } from './files'
 import { invitation, member, organization } from './organization'
+import { trash } from './trash'
 
 export const fileRelations = relations(file, ({ one }) => ({
 	user: one(user, { fields: [file.user], references: [user.id] }),
+}))
+
+export const trashRelations = relations(trash, ({ one }) => ({
+	user: one(user, { fields: [trash.user], references: [user.id] }),
+	file: one(file, { fields: [trash.file], references: [file.id] }),
+}))
+export const favoritesRelations = relations(favorites, ({ one }) => ({
+	user: one(user, { fields: [favorites.user], references: [user.id] }),
+	file: one(file, { fields: [favorites.file], references: [file.id] }),
 }))
 
 /*-------------Auth and User Relations-------------*/
