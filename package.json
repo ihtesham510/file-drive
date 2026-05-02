@@ -51,6 +51,7 @@
 	"dependencies": {
 		"@file-drive/env": "workspace:*",
 		"dotenv": "catalog:",
+		"drizzle-zod": "^0.8.3",
 		"zod": "catalog:"
 	},
 	"devDependencies": {

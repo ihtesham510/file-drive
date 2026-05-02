@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { FlatList, type FlatListProps } from 'react-native'
+import type { FlatListProps } from 'react-native'
+import Animated, { LinearTransition } from 'react-native-reanimated'
 import {
 	RefreshableContent,
 	type RefreshableContentProps,
@@ -8,12 +9,17 @@ import {
 interface Props<T> extends FlatListProps<T> {
 	refreshableContentProps?: RefreshableContentProps
 }
-export function ScrollList<T>(props: Props<T>) {
+
+export function ScrollList<T>({ refreshableContentProps, ...props }: Props<T>) {
 	const [isOnTop, setIsOnTop] = useState(false)
+
 	return (
-		<RefreshableContent {...props.refreshableContentProps} shouldPan={isOnTop}>
-			<FlatList
-				{...props}
+		<RefreshableContent {...refreshableContentProps} shouldPan={isOnTop}>
+			<Animated.FlatList
+				// biome-ignore lint/suspicious/noExplicitAny: <Cannot define the props types for Animated.FlatList so use any>
+				{...(props as any)}
+				itemLayoutAnimation={LinearTransition.springify()}
+				skipEnteringExitingAnimations
 				overScrollMode='never'
 				bounces={false}
 				scrollEventThrottle={16}
