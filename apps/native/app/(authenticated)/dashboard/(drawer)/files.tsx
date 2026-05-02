@@ -2,7 +2,6 @@ import { Delete02Icon, StarIcon, StarOffIcon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react-native'
 import { useQuery } from '@tanstack/react-query'
 import { Image } from 'expo-image'
-import { useCallback, useState } from 'react'
 import { View } from 'react-native'
 import { useResolveClassNames } from 'uniwind'
 import { ScrollList } from '@/components/common/scroll-list'
@@ -10,21 +9,19 @@ import { SwipeAbleView } from '@/components/common/swipeable-view'
 import { ThemedText } from '@/components/common/themed-text'
 import { ThemedView } from '@/components/common/themed-view'
 import { useFavorites } from '@/hooks/use-favorites'
+import { useTrash } from '@/hooks/use-trash'
 import { trpc } from '@/utils/trpc'
 import { getUri } from '@/utils/uri'
 
 export default function Page() {
 	const files = useQuery(trpc.files.list.queryOptions())
 	const { favorites, toggle } = useFavorites()
-	const [trash, setTrash] = useState<string[]>([])
+	const { add: addToTrash } = useTrash()
 	const imageStyles = useResolveClassNames('size-15 rounded-lg bg-primary')
 
-	const addToTrash = useCallback((id: string) => {
-		setTrash(prev => [...prev, id])
-	}, [])
 	return (
 		<ScrollList
-			data={files.data?.filter(file => !trash.includes(file.id))}
+			data={files.data}
 			onScroll={e => e.nativeEvent.contentOffset.y === 0}
 			showsVerticalScrollIndicator={false}
 			refreshableContentProps={{

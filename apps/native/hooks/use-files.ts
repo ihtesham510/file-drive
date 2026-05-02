@@ -17,7 +17,7 @@ function toMediaTypeValue(
 	return [MediaLibrary.MediaType.photo, MediaLibrary.MediaType.video]
 }
 
-export function useFiles({
+export function useMediaFiles({
 	mediaType = 'all',
 	pageSize = 30,
 	albumName,

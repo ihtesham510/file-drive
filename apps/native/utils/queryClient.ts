@@ -8,6 +8,7 @@ declare module '@tanstack/react-query' {
 	interface Register {
 		mutationMeta: {
 			queryKey?: QueryKey
+			queryKeys?: QueryKey[]
 			errorLog?: string
 			successLog?: string
 			setQueryData?: { updater: (data: unknown) => unknown; queryKey: QueryKey }
@@ -39,6 +40,11 @@ export const queryClient = new QueryClient({
 		onSettled(_data, _variables, _onMutateResult, _mutation, _context) {
 			if (_context.meta?.queryKey) {
 				queryClient.invalidateQueries({ queryKey: _context.meta?.queryKey })
+			}
+			if (_context.meta?.queryKeys) {
+				for (const queryKey of _context.meta.queryKeys) {
+					queryClient.invalidateQueries({ queryKey })
+				}
 			}
 		},
 	}),
