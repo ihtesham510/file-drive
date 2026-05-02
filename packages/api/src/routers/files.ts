@@ -1,13 +1,26 @@
 import { db } from '@file-drive/db'
 import { file } from '@file-drive/db/schema/files'
-import { and, eq, inArray } from 'drizzle-orm'
+import { trash } from '@file-drive/db/schema/trash'
+import { and, eq, inArray, notExists } from 'drizzle-orm'
 import { createInsertSchema } from 'drizzle-zod'
 import z from 'zod'
 import { protectedProcedure, router } from '../index'
 
 export const fileRouter = router({
 	list: protectedProcedure.query(async ({ ctx: { userId } }) => {
-		return await db.select().from(file).where(eq(file.user, userId))
+		try {
+			return await db
+				.select()
+				.from(file)
+				.where(
+					and(
+						eq(file.user, userId),
+						notExists(db.select().from(trash).where(eq(trash.user, userId))),
+					),
+				)
+		} catch (err) {
+			console.log(err)
+		}
 	}),
 	create: protectedProcedure
 		.input(createInsertSchema(file).omit({ user: true }))

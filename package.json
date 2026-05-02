@@ -27,8 +27,8 @@
 	},
 	"type": "module",
 	"scripts": {
-		"dev": "turbo dev",
-		"build": "turbo build",
+		"dev": "turbo dev --ui=tui",
+		"build": "turbo build --ui=tui",
 		"check-types": "turbo check-types",
 		"dev:native": "turbo -F @file-drive/native dev",
 		"dev:web": "turbo -F @file-drive/web dev",
