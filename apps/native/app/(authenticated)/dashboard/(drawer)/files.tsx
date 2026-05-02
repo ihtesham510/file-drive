@@ -1,32 +1,84 @@
+import { Delete02Icon, StarIcon, StarOffIcon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react-native'
 import { useQuery } from '@tanstack/react-query'
 import { Image } from 'expo-image'
-import { Pressable } from 'react-native'
+import { useCallback, useState } from 'react'
+import { View } from 'react-native'
 import { useResolveClassNames } from 'uniwind'
 import { ScrollList } from '@/components/common/scroll-list'
+import { SwipeAbleView } from '@/components/common/swipeable-view'
+import { ThemedText } from '@/components/common/themed-text'
+import { ThemedView } from '@/components/common/themed-view'
+import { useFavorites } from '@/hooks/use-favorites'
 import { trpc } from '@/utils/trpc'
 import { getUri } from '@/utils/uri'
 
 export default function Page() {
 	const files = useQuery(trpc.files.list.queryOptions())
-	const imageStyles = useResolveClassNames('h-125 w-full rounded-lg bg-primary')
+	const { favorites, toggle } = useFavorites()
+	const [trash, setTrash] = useState<string[]>([])
+	const imageStyles = useResolveClassNames('size-15 rounded-lg bg-primary')
+
+	const addToTrash = useCallback((id: string) => {
+		setTrash(prev => [...prev, id])
+	}, [])
 	return (
 		<ScrollList
-			data={files.data?.reverse()}
+			data={files.data?.filter(file => !trash.includes(file.id))}
 			onScroll={e => e.nativeEvent.contentOffset.y === 0}
 			showsVerticalScrollIndicator={false}
+			refreshableContentProps={{
+				onReload: async () => {
+					await files.refetch()
+					await favorites.refetch()
+				},
+			}}
 			contentContainerClassName='gap-4'
 			keyExtractor={file => file.id}
 			renderItem={({ item }) => {
+				const isFavorite = favorites.data?.includes(item.id)
 				return (
-					<Pressable className='relative w-full items-center justify-center p-4'>
-						<Image
-							style={imageStyles}
-							contentFit='cover'
-							source={{
-								uri: getUri(item.key),
+					<View className='px-4'>
+						<SwipeAbleView
+							underViewProps={{
+								className: 'justify-between items-center rounded-md',
 							}}
-						/>
-					</Pressable>
+							contentViewProps={{
+								className:
+									'items-center w-full flex-row bg-background gap-4 rounded-md',
+							}}
+							underView={
+								<View className='h-full w-full flex-row items-center justify-between rounded-md'>
+									<View className='h-full w-[50%] flex-row items-center justify-start rounded-md bg-primary pl-4'>
+										<HugeiconsIcon
+											icon={isFavorite ? StarOffIcon : StarIcon}
+											size={28}
+										/>
+									</View>
+									<View className='h-full w-[50%] flex-row items-center justify-end rounded-md bg-destructive pr-4'>
+										<HugeiconsIcon icon={Delete02Icon} size={18} />
+									</View>
+								</View>
+							}
+							thrustHold={70}
+							onSwipeLeft={() => toggle(item.id)}
+							onSwipeRight={() => addToTrash(item.id)}
+						>
+							<Image
+								style={imageStyles}
+								contentFit='cover'
+								source={{
+									uri: getUri(item.key),
+								}}
+							/>
+							<ThemedView className='justify-center'>
+								<ThemedText varient='semiBold'>{item.name}</ThemedText>
+								<ThemedText className='text-muted-foreground'>
+									{item.type}
+								</ThemedText>
+							</ThemedView>
+						</SwipeAbleView>
+					</View>
 				)
 			}}
 		/>

@@ -1,4 +1,5 @@
 import { protectedProcedure, publicProcedure, router } from '../index'
+import { favoritesRouter } from './favorites'
 import { fileRouter } from './files'
 import { todoRouter } from './todo'
 
@@ -14,5 +15,6 @@ export const appRouter = router({
 	}),
 	todo: todoRouter,
 	files: fileRouter,
+	favorites: favoritesRouter,
 })
 export type AppRouter = typeof appRouter
