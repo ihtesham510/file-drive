@@ -7,11 +7,11 @@ import { Container } from '@/components/common/container'
 import { ThemedText } from '@/components/common/themed-text'
 import { ThemedView } from '@/components/common/themed-view'
 import { useFileUpload } from '@/hooks/use-file-upload'
-import { useFiles } from '@/hooks/use-files'
+import { useMediaFiles } from '@/hooks/use-files'
 
 export default function Page() {
 	const { files, permissionStatus, requestPermission, permissionStatusEnum } =
-		useFiles()
+		useMediaFiles()
 	const imageStyles = useResolveClassNames('h-125 w-[90%] rounded-lg')
 	const [uploadState, setSelectedFiles, handleUpload] = useFileUpload({})
 	const selectedFiles = uploadState.uris
