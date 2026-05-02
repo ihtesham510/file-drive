@@ -24,6 +24,8 @@ import { useCSSVariable } from 'uniwind'
 import { ThemedView } from '@/components/common/themed-view'
 import { cn } from '@/lib/utils'
 
+const HORIZONTAL_THRESHOLD = 45 // pixels - tolerance for accidental horizontal movement
+
 export interface RefreshableContentHandle {
 	addPan: (dy: number) => void
 	releasePan: () => Promise<void>
@@ -61,6 +63,8 @@ export function RefreshableContent({
 	const shouldPanRef = useRef(shouldPan)
 	const isReloading = useRef(false)
 	const onReloadRef = useRef(props.onReload)
+	const maxHorizontalDxRef = useRef(0) // Track max horizontal movement during gesture
+	const maxVerticalDyRef = useRef(0) // Track max horizontal movement during gesture
 
 	const resetPan = useCallback(() => {
 		isReloading.current = false
@@ -131,8 +135,22 @@ export function RefreshableContent({
 
 	const panHandlers = useRef(
 		PanResponder.create({
+			onStartShouldSetPanResponder: () => {
+				// Reset horizontal tracking on new gesture start
+				maxHorizontalDxRef.current = 0
+				return false
+			},
 			onMoveShouldSetPanResponder: (_e, gestureState) => {
-				return shouldPanRef.current && gestureState.dy > 0
+				const { dx, dy } = gestureState
+				maxHorizontalDxRef.current = Math.max(
+					maxHorizontalDxRef.current,
+					Math.abs(dx),
+				)
+				return (
+					shouldPanRef.current &&
+					dy > 0 &&
+					maxHorizontalDxRef.current < HORIZONTAL_THRESHOLD
+				)
 			},
 			onPanResponderGrant() {
 				if (isReloading.current) return
@@ -141,12 +159,23 @@ export function RefreshableContent({
 			},
 			onPanResponderMove(_e, gestureState) {
 				if (isReloading.current) return
+
+				// Stop pan if user scrolls horizontally beyond threshold
+				if (Math.abs(gestureState.dx) > HORIZONTAL_THRESHOLD) {
+					shouldPanRef.current = false
+					panY.value = 0
+					return
+				}
+
 				if (gestureState.dy < MAX_PAN) {
 					panY.value = Math.max(0, gestureState.dy)
 				}
 			},
 			async onPanResponderRelease() {
 				if (isReloading.current) return
+				shouldPanRef.current = true // Re-enable pan for next gesture
+				maxHorizontalDxRef.current = 0 // Reset tracking
+
 				if (panY.value >= THRUST_HOLD) {
 					await triggerReload()
 				} else {
