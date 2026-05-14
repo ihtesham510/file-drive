@@ -1,11 +1,10 @@
 import {
-	type PropsWithChildren,
 	type RefObject,
 	useCallback,
 	useImperativeHandle,
 	useState,
 } from 'react'
-import { View } from 'react-native'
+import { View, type ViewProps } from 'react-native'
 import {
 	Gesture,
 	GestureDetector,
@@ -13,6 +12,7 @@ import {
 	type PanGestureHandlerEventPayload,
 } from 'react-native-gesture-handler'
 import Animated, {
+	type AnimatedProps,
 	interpolate,
 	interpolateColor,
 	type SharedValue,
@@ -39,12 +39,13 @@ export type ButtonProps = {
 	state: {
 		snapPoint: SharedValue<Snap>
 		direction: SharedValue<number>
+		contentWidth: number
 		translateX: SharedValue<number>
 	}
 	methods: SwipeableMethods
 }
 
-interface Props extends PropsWithChildren {
+interface Props extends AnimatedProps<ViewProps> {
 	ref?: RefObject<SwipeableMethods | null>
 	onOpenChange?: (direction: number) => void
 	sensitivity?: number
@@ -75,11 +76,12 @@ export function SwipeAbleItem({
 	canSwipeLeft = true,
 	canSwipeRight = true,
 	children,
+	...viewProps
 }: Props) {
 	const [contentWidth, setContentWidth] = useState(0)
 	const [backgroundColor, cardColor] = useCSSVariable([
 		'--color-background',
-		'--color-card',
+		'--color-accent',
 	]) as string[]
 
 	const translateX = useSharedValue<number>(0)
@@ -91,14 +93,14 @@ export function SwipeAbleItem({
 	useAnimatedReaction(
 		() => ({
 			dir: direction.value,
-			x: direction.value,
+			x: translateX.value,
 		}),
 		({ dir, x }) => {
 			if (onOpenChange) {
 				runOnJS(onOpenChange)(dir)
 			}
 			open.value = dir !== 0
-			if (x === contentWidth) {
+			if (Math.abs(x) === contentWidth) {
 				snapPoint.value = 'full'
 			} else {
 				snapPoint.value = x
@@ -139,6 +141,7 @@ export function SwipeAbleItem({
 			snapPoint,
 			direction,
 			translateX,
+			contentWidth,
 		},
 		methods: {
 			open,
@@ -283,7 +286,10 @@ export function SwipeAbleItem({
 						</Animated.View>
 					)}
 
-					<Animated.View style={[mainStyle, { width: '100%' }]}>
+					<Animated.View
+						style={[mainStyle, { width: '100%' }, viewProps.style]}
+						{...viewProps}
+					>
 						{children}
 					</Animated.View>
 				</View>

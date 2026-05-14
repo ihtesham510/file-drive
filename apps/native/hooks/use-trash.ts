@@ -6,6 +6,8 @@ const trashQueryKey = trpc.trash.list_ids.queryKey()
 const trashFilesQueryKey = trpc.trash.list_files.queryKey()
 const filesQueryKey = trpc.files.list.queryKey()
 
+// TODO: add optimistic updates
+
 export function useTrash() {
 	const queryClient = useQueryClient()
 	const trash = useQuery(trpc.trash.list_ids.queryOptions())

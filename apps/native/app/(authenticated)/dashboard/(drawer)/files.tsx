@@ -1,16 +1,24 @@
-import { StarIcon } from '@hugeicons/core-free-icons'
-import { HugeiconsIcon } from '@hugeicons/react-native'
+import { StarIcon, StarOffIcon, Trash } from '@hugeicons/core-free-icons'
 import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useCSSVariable } from 'uniwind'
 import { NotFoundIllustration } from '@/components/common/not-found-illustration'
+import { RenderUnderIcon } from '@/components/common/render-under-icons'
 import { ThemedView } from '@/components/common/themed-view'
 import { FilesList } from '@/components/dashboard/files-list'
 import { useFavorites } from '@/hooks/use-favorites'
 import { useTrash } from '@/hooks/use-trash'
 import { trpc } from '@/utils/trpc'
 
+const SNAP_POINT = 150
+const OFF_SET = 8
+
 export default function Page() {
+	const [rightIconColor, leftIconColor] = useCSSVariable([
+		'--color-destructive-foreground',
+		'--color-primary-foreground',
+	]) as string[]
 	const files = useQuery(trpc.files.list.queryOptions())
 	const insets = useSafeAreaInsets()
 	const { favorites, toggle } = useFavorites()
@@ -28,35 +36,60 @@ export default function Page() {
 			</ThemedView>
 		)
 	return (
-		<ThemedView className='flex-1' style={{ paddingBottom: insets.bottom }}>
-			<FilesList
-				onReload={async () => {
-					await files.refetch()
-					await favorites.refetch()
-					await trash.refetch()
-				}}
-				data={files.data.map(file => ({
-					...file,
-					createdAt: new Date(file.createdAt),
-					updatedAt: new Date(file.updatedAt),
-				}))}
-				underLeftContent={(_file, _props) => {
-					return (
-						<ThemedView>
-							<HugeiconsIcon icon={StarIcon} size={38} />
-						</ThemedView>
-					)
-				}}
-				underRightContnet={(_file, _props) => {
-					return (
-						<ThemedView className='flex-1 items-center justify-center'>
-							<HugeiconsIcon icon={StarIcon} size={38} />
-						</ThemedView>
-					)
-				}}
-				onPressRight={file => addToTrash(file.id)}
-				onPressLeft={file => toggle(file.id)}
-			/>
-		</ThemedView>
+		<FilesList
+			onReload={async () => {
+				await files.refetch()
+				await favorites.refetch()
+				await trash.refetch()
+			}}
+			data={files.data.map(file => ({
+				...file,
+				createdAt: new Date(file.createdAt),
+				updatedAt: new Date(file.updatedAt),
+			}))}
+			underLeftContent={(_file, _props) => {
+				const isFavorite = !!favorites.data?.includes(_file.id)
+				return (
+					<RenderUnderIcon
+						offset={OFF_SET}
+						side='left'
+						icon={isFavorite ? StarOffIcon : StarIcon}
+						viewProps={{
+							className: 'bg-primary',
+						}}
+						textProps={{
+							className: 'text-primary-foreground',
+						}}
+						text={isFavorite ? 'Remove From Favorites' : 'Add To Favorites'}
+						iconColor={leftIconColor}
+						buttonProps={_props}
+						snapPoint={SNAP_POINT}
+					/>
+				)
+			}}
+			underRightContnet={(_, _props) => {
+				return (
+					<RenderUnderIcon
+						offset={OFF_SET}
+						side='right'
+						icon={Trash}
+						viewProps={{
+							className: 'bg-destructive',
+						}}
+						textProps={{
+							className: 'text-destructive-foreground',
+						}}
+						iconColor={rightIconColor}
+						text='Move To Trash'
+						buttonProps={_props}
+						snapPoint={SNAP_POINT}
+					/>
+				)
+			}}
+			onPressRight={file => addToTrash(file.id)}
+			onPressLeft={file => toggle(file.id)}
+			shouldExpandRight={() => true}
+			shouldExpandLeft={_file => !!favorites.data?.includes(_file.id)}
+		/>
 	)
 }

@@ -1,3 +1,5 @@
+// BUG: sometimes does not work
+
 import { Loading02Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react-native'
 import {
@@ -24,7 +26,7 @@ import { useCSSVariable } from 'uniwind'
 import { ThemedView } from '@/components/common/themed-view'
 import { cn } from '@/lib/utils'
 
-const HORIZONTAL_THRESHOLD = 45 // pixels - tolerance for accidental horizontal movement
+const HORIZONTAL_THRESHOLD = 45
 
 export interface RefreshableContentHandle {
 	addPan: (dy: number) => void
@@ -63,8 +65,7 @@ export function RefreshableContent({
 	const shouldPanRef = useRef(shouldPan)
 	const isReloading = useRef(false)
 	const onReloadRef = useRef(props.onReload)
-	const maxHorizontalDxRef = useRef(0) // Track max horizontal movement during gesture
-	const maxVerticalDyRef = useRef(0) // Track max horizontal movement during gesture
+	const maxHorizontalDxRef = useRef(0)
 
 	const resetPan = useCallback(() => {
 		isReloading.current = false

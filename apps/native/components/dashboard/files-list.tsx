@@ -1,19 +1,14 @@
 import type { FileSchema } from '@file-drive/db/schema/zod'
-import { HugeiconsIcon, type IconSvgElement } from '@hugeicons/react-native'
 import { Image } from 'expo-image'
-import { type ReactNode, useEffect, useRef, useState } from 'react'
+import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { View, type ViewProps } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
-import {
-	interpolate,
-	useAnimatedStyle,
-	useSharedValue,
-} from 'react-native-reanimated'
 import { runOnJS } from 'react-native-worklets'
-import { useCSSVariable, useResolveClassNames } from 'uniwind'
+import { useResolveClassNames } from 'uniwind'
 import { ScrollList } from '@/components/common/scroll-list'
 import {
 	type ButtonProps,
+	type Snap,
 	SwipeAbleItem,
 	type SwipeableMethods,
 } from '@/components/common/swipeable-view'
@@ -24,6 +19,9 @@ import { getUri } from '@/utils/uri'
 
 interface FilesListProps {
 	data: FileSchema[]
+	snaps?: Snap[]
+	shouldExpandRight?: (data: FileSchema) => boolean
+	shouldExpandLeft?: (data: FileSchema) => boolean
 	onReload?: () => Promise<void>
 	underLeftContent?: (data: FileSchema, props: ButtonProps) => ReactNode
 	underRightContnet?: (data: FileSchema, props: ButtonProps) => ReactNode
@@ -42,11 +40,14 @@ interface ItemProps extends FilesListProps {
 }
 
 interface ButtonViewProps extends ButtonProps {
+	shouldExpand?: boolean
 	content: () => ReactNode
 	viewProps?: ViewProps
+	onPress?: () => void
 }
 
 export function FilesList(props: FilesListProps) {
+	// TODO: instead of using state use sharedValue
 	const [open, setOpen] = useState<string | null>(null)
 	return (
 		<ScrollList
@@ -75,6 +76,8 @@ function RenderItem(props: ItemProps) {
 	const { item, open, onOpenChange } = props
 	const imageStyles = useResolveClassNames('size-15 rounded-lg bg-primary')
 	const ref = useRef<SwipeableMethods>(null)
+	const shouldExpandLeft = !!props.shouldExpandLeft?.(item)
+	const shouldExpandRight = !!props.shouldExpandRight?.(item)
 
 	useEffect(() => {
 		const isOpen = open && open === item.id
@@ -85,7 +88,9 @@ function RenderItem(props: ItemProps) {
 
 	return (
 		<SwipeAbleItem
+			className='rounded-lg'
 			ref={ref}
+			snaps={props.snaps}
 			canSwipeRight={props.canSwipeRigth}
 			canSwipeLeft={props.canSwipeLeft}
 			onOpenChange={direction =>
@@ -97,6 +102,8 @@ function RenderItem(props: ItemProps) {
 					{...buttonProps}
 					viewProps={props.underLeftViewProps}
 					content={() => props.underLeftContent?.(item, buttonProps)}
+					onPress={() => props.onPressLeft?.(item)}
+					shouldExpand={shouldExpandLeft}
 				/>
 			)}
 			rightView={buttonProps => (
@@ -104,6 +111,8 @@ function RenderItem(props: ItemProps) {
 					{...buttonProps}
 					viewProps={props.underRightViewProps}
 					content={() => props.underRightContnet?.(item, buttonProps)}
+					onPress={() => props.onPressRight?.(item)}
+					shouldExpand={shouldExpandRight}
 				/>
 			)}
 		>
@@ -124,13 +133,42 @@ function RenderItem(props: ItemProps) {
 	)
 }
 
-function UnderView({ content, viewProps }: ButtonViewProps) {
+function UnderView({
+	content,
+	viewProps,
+	shouldExpand,
+	...props
+}: ButtonViewProps) {
+	const jsCallback = useCallback(() => {
+		props.onPress?.()
+	}, [props.onPress])
+	const tap = Gesture.Tap().onEnd(() => {
+		const isRight =
+			props.state.direction.value !== 0 && props.state.direction.value === -1
+		const isLeft =
+			props.state.direction.value !== 0 && props.state.direction.value === 1
+
+		if (shouldExpand && props.state.snapPoint.value !== 'full') {
+			if (isRight) {
+				props.methods.openRight({ snapPoint: 'full' })
+				return
+			}
+			if (isLeft) {
+				props.methods.openLeft({ snapPoint: 'full' })
+				return
+			}
+		}
+		runOnJS(jsCallback)()
+		props.methods.close({})
+	})
 	return (
-		<ThemedView
-			{...viewProps}
-			className={cn('h-full w-full bg-primary', viewProps?.className)}
-		>
-			{content()}
-		</ThemedView>
+		<GestureDetector gesture={tap}>
+			<ThemedView
+				{...viewProps}
+				className={cn('h-full w-full bg-transparent', viewProps?.className)}
+			>
+				{content()}
+			</ThemedView>
+		</GestureDetector>
 	)
 }
