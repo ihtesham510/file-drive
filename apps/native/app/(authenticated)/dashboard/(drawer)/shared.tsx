@@ -1,10 +1,12 @@
+import { RefreshableContent } from '@/components/common/refreshable-content'
 import { ThemedText } from '@/components/common/themed-text'
 import { ThemedView } from '@/components/common/themed-view'
+import App from '@/components/swipeable-example/example'
 
 export default function Page() {
 	return (
-		<ThemedView className='flex-1 items-center justify-center'>
-			<ThemedText>Shared</ThemedText>
-		</ThemedView>
+		<RefreshableContent>
+			<App />
+		</RefreshableContent>
 	)
 }

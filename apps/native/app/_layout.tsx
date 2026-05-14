@@ -6,13 +6,14 @@ import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
-import { useUniwind } from 'uniwind'
+import { Uniwind } from 'uniwind'
 import { AppThemeProvider } from '@/contexts/app-theme-context'
 import { authClient } from '@/lib/auth-client'
 import { queryClient } from '@/utils/queryClient'
 
+Uniwind.setTheme('dark')
+
 function StackLayout() {
-	const { theme } = useUniwind()
 	const session = authClient.useSession()
 	const network = useNetworkState()
 	const isProperlyConnected =
@@ -22,7 +23,7 @@ function StackLayout() {
 
 	return (
 		<>
-			<StatusBar style={theme === 'dark' ? 'dark' : 'light'} />
+			<StatusBar style='light' animated />
 			<Stack screenOptions={{ headerShown: false }}>
 				<Stack.Protected guard={!isAuthenticated}>
 					<Stack.Screen name='(auth)/sign-in' />

@@ -30,7 +30,7 @@
 		"dev": "turbo dev --ui=tui",
 		"build": "turbo build --ui=tui",
 		"check-types": "turbo check-types",
-		"dev:native": "turbo -F @file-drive/native dev",
+		"dev:native": "turbo -F @file-drive/native dev --ui=tui",
 		"dev:web": "turbo -F @file-drive/web dev",
 		"dev:server": "turbo -F @file-drive/server dev",
 		"db:push": "turbo -F @file-drive/db db:push",
