@@ -214,7 +214,7 @@ export function SwipeAbleItem({
 		)
 		return {
 			width: w,
-			opacity: interpolate(translateX.value, [0, thrustHold], [0, 1]),
+			opacity: interpolate(translateX.value, [0, thrustHold], [0, 1], 'clamp'),
 		}
 	})
 
@@ -226,7 +226,7 @@ export function SwipeAbleItem({
 		)
 		return {
 			width: w,
-			opacity: interpolate(translateX.value, [-thrustHold, 0], [1, 0]),
+			opacity: interpolate(translateX.value, [-thrustHold, 0], [1, 0], 'clamp'),
 		}
 	})
 

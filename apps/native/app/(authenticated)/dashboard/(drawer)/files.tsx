@@ -1,4 +1,5 @@
-import { Delete02Icon, StarIcon, StarOffIcon } from '@hugeicons/core-free-icons'
+import { StarIcon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react-native'
 import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -39,18 +40,22 @@ export default function Page() {
 					createdAt: new Date(file.createdAt),
 					updatedAt: new Date(file.updatedAt),
 				}))}
-				underLeftView={{
-					className: 'bg-primary',
+				underLeftContent={(_file, _props) => {
+					return (
+						<ThemedView>
+							<HugeiconsIcon icon={StarIcon} size={38} />
+						</ThemedView>
+					)
 				}}
-				underRightView={{
-					className: 'bg-destructive',
+				underRightContnet={(_file, _props) => {
+					return (
+						<ThemedView className='flex-1 items-center justify-center'>
+							<HugeiconsIcon icon={StarIcon} size={38} />
+						</ThemedView>
+					)
 				}}
-				underLeftIcon={file =>
-					favorites.data?.includes(file.id) ? StarOffIcon : StarIcon
-				}
-				underRightIcon={() => Delete02Icon}
-				onSwipeRight={file => addToTrash(file.id)}
-				onSwipeLeft={file => toggle(file.id)}
+				onPressRight={file => addToTrash(file.id)}
+				onPressLeft={file => toggle(file.id)}
 			/>
 		</ThemedView>
 	)

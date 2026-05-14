@@ -1,7 +1,7 @@
 import type { FileSchema } from '@file-drive/db/schema/zod'
 import { HugeiconsIcon, type IconSvgElement } from '@hugeicons/react-native'
 import { Image } from 'expo-image'
-import { useEffect, useRef, useState } from 'react'
+import { type ReactNode, useEffect, useRef, useState } from 'react'
 import { View, type ViewProps } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import {
@@ -19,19 +19,20 @@ import {
 } from '@/components/common/swipeable-view'
 import { ThemedText } from '@/components/common/themed-text'
 import { ThemedView } from '@/components/common/themed-view'
+import { cn } from '@/lib/utils'
 import { getUri } from '@/utils/uri'
 
 interface FilesListProps {
 	data: FileSchema[]
 	onReload?: () => Promise<void>
-	underRightIcon: (data: FileSchema) => IconSvgElement
-	underLeftIcon: (data: FileSchema) => IconSvgElement
+	underLeftContent?: (data: FileSchema, props: ButtonProps) => ReactNode
+	underRightContnet?: (data: FileSchema, props: ButtonProps) => ReactNode
 	canSwipeRigth?: boolean
 	canSwipeLeft?: boolean
-	onSwipeRight?: (item: FileSchema) => void
-	onSwipeLeft?: (item: FileSchema) => void
-	underRightView?: ViewProps
-	underLeftView?: ViewProps
+	onPressRight?: (item: FileSchema) => void
+	onPressLeft?: (item: FileSchema) => void
+	underRightViewProps?: ViewProps
+	underLeftViewProps?: ViewProps
 }
 
 interface ItemProps extends FilesListProps {
@@ -41,13 +42,15 @@ interface ItemProps extends FilesListProps {
 }
 
 interface ButtonViewProps extends ButtonProps {
-	icon: IconSvgElement
+	content: () => ReactNode
+	viewProps?: ViewProps
 }
 
 export function FilesList(props: FilesListProps) {
 	const [open, setOpen] = useState<string | null>(null)
 	return (
 		<ScrollList
+			key='hi'
 			data={props.data}
 			className='px-4'
 			onScroll={e => e.nativeEvent.contentOffset.y === 0}
@@ -68,7 +71,8 @@ export function FilesList(props: FilesListProps) {
 	)
 }
 
-function RenderItem({ item, open, onOpenChange, ...props }: ItemProps) {
+function RenderItem(props: ItemProps) {
+	const { item, open, onOpenChange } = props
 	const imageStyles = useResolveClassNames('size-15 rounded-lg bg-primary')
 	const ref = useRef<SwipeableMethods>(null)
 
@@ -82,13 +86,25 @@ function RenderItem({ item, open, onOpenChange, ...props }: ItemProps) {
 	return (
 		<SwipeAbleItem
 			ref={ref}
+			canSwipeRight={props.canSwipeRigth}
+			canSwipeLeft={props.canSwipeLeft}
 			onOpenChange={direction =>
 				onOpenChange?.(direction !== 0 ? item.id : undefined)
 			}
 			snap={150}
-			canSwipeLeft={false}
-			rightView={viewProps => (
-				<RightView {...viewProps} icon={props.underRightIcon(item)} />
+			leftView={buttonProps => (
+				<UnderView
+					{...buttonProps}
+					viewProps={props.underLeftViewProps}
+					content={() => props.underLeftContent?.(item, buttonProps)}
+				/>
+			)}
+			rightView={buttonProps => (
+				<UnderView
+					{...buttonProps}
+					viewProps={props.underRightViewProps}
+					content={() => props.underRightContnet?.(item, buttonProps)}
+				/>
 			)}
 		>
 			<View className='flex-row gap-4 rounded-2xl p-2'>
@@ -108,125 +124,13 @@ function RenderItem({ item, open, onOpenChange, ...props }: ItemProps) {
 	)
 }
 
-function LeftView({ progress, methods, icon }: ButtonViewProps) {
-	const iconColor = useCSSVariable('--color-primary-foreground') as string
-	const animatedStyle = useAnimatedStyle(() => {
-		return {
-			transform: [
-				{
-					scale: interpolate(progress.value, [0, 150], [0, 1], 'clamp'),
-				},
-			],
-		}
-	})
-	const tap = Gesture.Tap()
-		.runOnJS(true)
-		.onEnd(() =>
-			methods.openLeft?.({
-				snapPoint: 'full',
-			}),
-		)
-
+function UnderView({ content, viewProps }: ButtonViewProps) {
 	return (
-		<ThemedView className='h-full w-full items-center justify-center bg-transparent'>
-			<GestureDetector gesture={tap}>
-				<ThemedView
-					animated
-					style={animatedStyle}
-					className='w-full items-center justify-center rounded-2xl bg-primary px-6 py-4'
-				>
-					<HugeiconsIcon color={iconColor} icon={icon} size={38} />
-				</ThemedView>
-			</GestureDetector>
-		</ThemedView>
-	)
-}
-
-function RightView({
-	progress,
-	methods,
-	icon,
-	state: { snapPoint },
-}: ButtonViewProps) {
-	const button1Selected = useSharedValue(false)
-	const button2Selected = useSharedValue(false)
-
-	const animatedStyleOne = useAnimatedStyle(() => {
-		if (snapPoint.value === 'full' && !button1Selected.value) {
-			return {
-				transform: [{ scale: 0 }],
-			}
-		}
-		return {
-			transform: [
-				{
-					scale: interpolate(progress.value, [-150, 0], [1, 0], 'clamp'),
-				},
-			],
-		}
-	})
-	const animatedStyleTwo = useAnimatedStyle(() => {
-		if (snapPoint.value === 'full' && !button2Selected.value) {
-			return {
-				transform: [{ scale: 0 }],
-			}
-		}
-		return {
-			transform: [
-				{
-					scale: interpolate(progress.value, [-150, 0], [1, 0], 'clamp'),
-				},
-			],
-		}
-	})
-	const iconColor = useCSSVariable('--color-primary-foreground') as string
-	const tapButton1 = Gesture.Tap().onEnd(() => {
-		if (methods.openRight && methods.close) {
-			if (snapPoint.value === 'full') {
-				runOnJS(methods.close)({})
-				button1Selected.value = false
-			} else {
-				button1Selected.value = true
-				runOnJS(methods.openRight)({
-					snapPoint: 'full',
-				})
-			}
-		}
-	})
-	const tapButton2 = Gesture.Tap().onEnd(() => {
-		if (methods.openRight && methods.close) {
-			if (snapPoint.value === 'full') {
-				runOnJS(methods.close)({})
-				button2Selected.value = false
-			} else {
-				button2Selected.value = true
-				runOnJS(methods.openRight)({
-					snapPoint: 'full',
-				})
-			}
-		}
-	})
-	return (
-		<ThemedView className='h-full w-full flex-row items-center justify-center bg-transparent'>
-			<GestureDetector gesture={tapButton1}>
-				<ThemedView
-					animated
-					className='m-1 h-full w-[48%] items-center justify-center rounded-2xl bg-primary'
-					style={animatedStyleOne}
-				>
-					<HugeiconsIcon color={iconColor} icon={icon} size={28} />
-				</ThemedView>
-			</GestureDetector>
-
-			<GestureDetector gesture={tapButton2}>
-				<ThemedView
-					animated
-					className='m-1 h-full w-[48%] items-center justify-center rounded-2xl bg-primary'
-					style={animatedStyleTwo}
-				>
-					<HugeiconsIcon color={iconColor} icon={icon} size={28} />
-				</ThemedView>
-			</GestureDetector>
+		<ThemedView
+			{...viewProps}
+			className={cn('h-full w-full bg-primary', viewProps?.className)}
+		>
+			{content()}
 		</ThemedView>
 	)
 }
