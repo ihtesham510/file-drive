@@ -25,20 +25,21 @@ import { runOnJS } from 'react-native-worklets'
 import { useCSSVariable } from 'uniwind'
 
 type Fn<T = Record<string, string>> = (args: T) => void
-type Snap = number | 'full'
-type OpeningArgs = { snapPoint?: Snap }
+export type Snap = number | 'full'
+export type OpeningArgs = { snapPoint?: Snap }
 
 export interface SwipeableMethods {
-	openRight?: Fn<OpeningArgs>
-	openLeft?: Fn<OpeningArgs>
-	close?: Fn
+	openRight: Fn<OpeningArgs>
+	openLeft: Fn<OpeningArgs>
+	close: Fn
+	open: SharedValue<boolean>
 }
 
 export type ButtonProps = {
-	progress: SharedValue<number>
 	state: {
 		snapPoint: SharedValue<Snap>
 		direction: SharedValue<number>
+		translateX: SharedValue<number>
 	}
 	methods: SwipeableMethods
 }
@@ -85,6 +86,7 @@ export function SwipeAbleItem({
 	const offsetX = useSharedValue<number>(0)
 	const direction = useSharedValue<number>(0)
 	const snapPoint = useSharedValue<Snap>(0)
+	const open = useSharedValue<boolean>(false)
 
 	useAnimatedReaction(
 		() => ({
@@ -95,6 +97,7 @@ export function SwipeAbleItem({
 			if (onOpenChange) {
 				runOnJS(onOpenChange)(dir)
 			}
+			open.value = dir !== 0
 			if (x === contentWidth) {
 				snapPoint.value = 'full'
 			} else {
@@ -103,37 +106,49 @@ export function SwipeAbleItem({
 		},
 	)
 
+	const reset = useCallback(() => {
+		'worklet'
+		translateX.value = withSpring(0, SPRING_CONFIG)
+		direction.value = 0
+	}, [translateX, direction])
+
+	const openLeft = useCallback(
+		(args: OpeningArgs) => {
+			'worklet'
+			if (args.snapPoint === 'full') {
+				direction.value = 1
+				translateX.value = withSpring(contentWidth, SPRING_CONFIG)
+			}
+		},
+		[contentWidth, direction, translateX],
+	)
+
+	const openRight = useCallback(
+		(args: OpeningArgs) => {
+			'worklet'
+			if (args.snapPoint === 'full') {
+				direction.value = -1
+				translateX.value = withSpring(-contentWidth, SPRING_CONFIG)
+			}
+		},
+		[contentWidth, direction, translateX],
+	)
+
 	const buttonProps: ButtonProps = {
 		state: {
 			snapPoint,
 			direction,
+			translateX,
 		},
-		progress: translateX,
 		methods: {
-			close() {
-				reset()
-			},
-			openLeft(args) {
-				if (args.snapPoint === 'full') {
-					direction.value = 1
-					translateX.value = withSpring(contentWidth, SPRING_CONFIG)
-				}
-			},
-			openRight(args) {
-				if (args.snapPoint === 'full') {
-					direction.value = -1
-					translateX.value = withSpring(-contentWidth, SPRING_CONFIG)
-				}
-			},
+			open,
+			close: reset,
+			openLeft,
+			openRight,
 		},
 	}
 
 	useImperativeHandle(ref, () => buttonProps.methods)
-
-	const reset = useCallback(() => {
-		translateX.value = withSpring(0, SPRING_CONFIG)
-		direction.value = 0
-	}, [translateX, direction])
 
 	const rightSideSnap = rightSnap ?? snap ?? contentWidth
 	const leftSideSnap = leftSnap ?? snap ?? contentWidth
