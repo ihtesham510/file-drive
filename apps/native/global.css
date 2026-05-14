@@ -51,7 +51,7 @@
 			--color-accent: #f4f8e8;
 			--color-accent-foreground: #595e17;
 			--color-destructive: #e54b4f;
-			--color-destructive-foreground: #ffffff;
+			--color-destructive-foreground: #000000;
 			--color-border: #e7e7ee;
 			--color-input: #ebebeb;
 			--color-ring: #212702;
@@ -87,7 +87,7 @@
 			--color-accent: #2c2f14;
 			--color-accent-foreground: #b6c82d;
 			--color-destructive: #fd3f65;
-			--color-destructive-foreground: #ffffff;
+			--color-destructive-foreground: #000000;
 			--color-border: #272824;
 			--color-input: #373932;
 			--color-ring: #484d33;
