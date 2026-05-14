@@ -16,7 +16,7 @@ export const trashRouter = router({
 	}),
 	list_files: protectedProcedure.query(async ({ ctx: { userId } }) => {
 		return await db
-			.select()
+			.select({ file: file })
 			.from(trash)
 			.innerJoin(file, eq(trash.file, file.id))
 			.where(eq(trash.user, userId))
@@ -24,6 +24,10 @@ export const trashRouter = router({
 	add: protectedProcedure
 		.input(z.string())
 		.mutation(async ({ ctx: { userId }, input }) => {
+			const exits = !!(
+				await db.select().from(trash).where(eq(trash.file, input)).limit(1)
+			)[0]
+			if (exits) return
 			return await db.insert(trash).values({ file: input, user: userId })
 		}),
 	restore: protectedProcedure
