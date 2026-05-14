@@ -5,7 +5,7 @@ import { Image } from 'expo-image'
 import { Link } from 'expo-router'
 import { Pressable } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useResolveClassNames } from 'uniwind'
+import { useCSSVariable, useResolveClassNames } from 'uniwind'
 
 import { ThemedText } from '@/components/common/themed-text'
 import { ThemedView } from '@/components/common/themed-view'
@@ -15,15 +15,20 @@ export function DrawerHeader(props: DrawerHeaderProps) {
 	const insets = useSafeAreaInsets()
 	const { data } = authClient.useSession()
 	const imageStyle = useResolveClassNames('size-8 rounded-full absolute')
+	const iconColor = useCSSVariable('--color-muted-foreground') as string
 	return (
 		<ThemedView style={{ marginTop: insets.top }}>
 			<ThemedView className='h-auto flex-row items-center justify-between p-4'>
 				<Pressable onPress={props.navigation.toggleDrawer} className='p-1'>
-					<HugeiconsIcon icon={Menu02Icon} size={28} />
+					<HugeiconsIcon icon={Menu02Icon} size={28} color={iconColor} />
 				</Pressable>
 				<ThemedView className='flex-row items-center gap-4'>
 					<Link href='/dashboard/notifications' className='p-1'>
-						<HugeiconsIcon icon={Notification02Icon} size={28} />
+						<HugeiconsIcon
+							icon={Notification02Icon}
+							size={28}
+							color={iconColor}
+						/>
 					</Link>
 					<ThemedView className='relative size-12 items-center justify-center rounded-full bg-input/30'>
 						<ThemedText className='font-bold text-xl'>{`${data?.user.name[0]}${data?.user.name[1]}`}</ThemedText>
