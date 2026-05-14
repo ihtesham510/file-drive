@@ -9,6 +9,7 @@ const filesQueryKey = trpc.files.list.queryKey()
 export function useTrash() {
 	const queryClient = useQueryClient()
 	const trash = useQuery(trpc.trash.list_ids.queryOptions())
+	const files = useQuery(trpc.trash.list_files.queryOptions())
 
 	const addMutation = useMutation(
 		trpc.trash.add.mutationOptions({
@@ -50,5 +51,5 @@ export function useTrash() {
 		[queryClient, restoreMutation.mutate],
 	)
 
-	return { trash, add, restore }
+	return { files, trash, add, restore }
 }
