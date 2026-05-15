@@ -7,12 +7,10 @@ import { NotFoundIllustration } from '@/components/common/not-found-illustration
 import { RenderUnderIcon } from '@/components/common/render-under-icons'
 import { ThemedView } from '@/components/common/themed-view'
 import { FilesList } from '@/components/dashboard/files-list'
+import { OFF_SET, SNAP_POINT } from '@/constants'
 import { useFavorites } from '@/hooks/use-favorites'
 import { useTrash } from '@/hooks/use-trash'
 import { trpc } from '@/utils/trpc'
-
-const SNAP_POINT = 150
-const OFF_SET = 8
 
 export default function Page() {
 	const [rightIconColor, leftIconColor] = useCSSVariable([

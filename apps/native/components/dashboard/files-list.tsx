@@ -3,6 +3,11 @@ import { Image } from 'expo-image'
 import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { View, type ViewProps } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
+import {
+	type SharedValue,
+	useAnimatedReaction,
+	useSharedValue,
+} from 'react-native-reanimated'
 import { runOnJS } from 'react-native-worklets'
 import { useResolveClassNames } from 'uniwind'
 import { ScrollList } from '@/components/common/scroll-list'
@@ -35,8 +40,8 @@ interface FilesListProps {
 
 interface ItemProps extends FilesListProps {
 	item: FileSchema
-	open?: string | null
-	onOpenChange?: (id?: string) => void
+	selected: SharedValue<number>
+	index: number
 }
 
 interface ButtonViewProps extends ButtonProps {
@@ -47,11 +52,9 @@ interface ButtonViewProps extends ButtonProps {
 }
 
 export function FilesList(props: FilesListProps) {
-	// TODO: instead of using state use sharedValue
-	const [open, setOpen] = useState<string | null>(null)
+	const selected = useSharedValue<number>(0)
 	return (
 		<ScrollList
-			key='hi'
 			data={props.data}
 			className='px-4'
 			onScroll={e => e.nativeEvent.contentOffset.y === 0}
@@ -60,31 +63,40 @@ export function FilesList(props: FilesListProps) {
 				onReload: async () => await props.onReload?.(),
 			}}
 			keyExtractor={file => file.id}
-			renderItem={({ item }) => (
-				<RenderItem
-					item={item}
-					{...props}
-					onOpenChange={id => id && setOpen(id)}
-					open={open}
-				/>
+			renderItem={({ item, index }) => (
+				<RenderItem index={index} item={item} {...props} selected={selected} />
 			)}
 		/>
 	)
 }
 
 function RenderItem(props: ItemProps) {
-	const { item, open, onOpenChange } = props
+	const { item } = props
 	const imageStyles = useResolveClassNames('size-15 rounded-lg bg-primary')
 	const ref = useRef<SwipeableMethods>(null)
 	const shouldExpandLeft = !!props.shouldExpandLeft?.(item)
 	const shouldExpandRight = !!props.shouldExpandRight?.(item)
 
-	useEffect(() => {
-		const isOpen = open && open === item.id
-		if (!isOpen) {
-			ref.current?.close?.({})
-		}
-	}, [open, item.id])
+	const close = useCallback(() => {
+		ref.current?.close({})
+	}, [])
+	const open = useCallback(
+		(direction: number) => {
+			if (direction !== 0) {
+				props.selected.value = props.index
+			}
+		},
+		[props.index, props.selected],
+	)
+
+	useAnimatedReaction(
+		() => props.selected.value,
+		value => {
+			if (value !== props.index) {
+				runOnJS(close)()
+			}
+		},
+	)
 
 	return (
 		<SwipeAbleItem
@@ -93,9 +105,7 @@ function RenderItem(props: ItemProps) {
 			snaps={props.snaps}
 			canSwipeRight={props.canSwipeRigth}
 			canSwipeLeft={props.canSwipeLeft}
-			onOpenChange={direction =>
-				onOpenChange?.(direction !== 0 ? item.id : undefined)
-			}
+			onOpenChange={open}
 			snap={150}
 			leftView={buttonProps => (
 				<UnderView
