@@ -1,6 +1,6 @@
 import type { FileSchema } from '@file-drive/db/schema/zod'
 import { Image } from 'expo-image'
-import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
+import { type ReactNode, useCallback, useRef } from 'react'
 import { View, type ViewProps } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import {
@@ -38,7 +38,7 @@ interface FilesListProps {
 	underLeftViewProps?: ViewProps
 }
 
-interface ItemProps extends FilesListProps {
+interface ItemProps extends Omit<FilesListProps, 'data' | 'onReload'> {
 	item: FileSchema
 	selected: SharedValue<number>
 	index: number
@@ -51,27 +51,34 @@ interface ButtonViewProps extends ButtonProps {
 	onPress?: () => void
 }
 
-export function FilesList(props: FilesListProps) {
+export function FilesList({ data, onReload, ...props }: FilesListProps) {
 	const selected = useSharedValue<number>(0)
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <cannot pass prop as dependecy because they change on revery re-render>
+	const renderItem = useCallback(
+		({ item, index }: { item: FileSchema; index: number }) => {
+			return (
+				<RenderItem index={index} item={item} {...props} selected={selected} />
+			)
+		},
+		[selected],
+	)
 	return (
 		<ScrollList
-			data={props.data}
+			data={data}
 			className='px-4'
 			onScroll={e => e.nativeEvent.contentOffset.y === 0}
 			showsVerticalScrollIndicator={false}
 			refreshableContentProps={{
-				onReload: async () => await props.onReload?.(),
+				onReload: async () => await onReload?.(),
 			}}
 			keyExtractor={file => file.id}
-			renderItem={({ item, index }) => (
-				<RenderItem index={index} item={item} {...props} selected={selected} />
-			)}
+			renderItem={renderItem}
 		/>
 	)
 }
 
 function RenderItem(props: ItemProps) {
-	const { item } = props
+	const { item, index, selected } = props
 	const imageStyles = useResolveClassNames('size-15 rounded-lg bg-primary')
 	const ref = useRef<SwipeableMethods>(null)
 	const shouldExpandLeft = !!props.shouldExpandLeft?.(item)
@@ -80,22 +87,61 @@ function RenderItem(props: ItemProps) {
 	const close = useCallback(() => {
 		ref.current?.close({})
 	}, [])
+
 	const open = useCallback(
 		(direction: number) => {
 			if (direction !== 0) {
-				props.selected.value = props.index
+				selected.value = index
 			}
 		},
-		[props.index, props.selected],
+		[index, selected],
 	)
 
 	useAnimatedReaction(
 		() => props.selected.value,
 		value => {
-			if (value !== props.index) {
+			if (value !== index) {
 				runOnJS(close)()
 			}
 		},
+	)
+
+	const leftView = useCallback(
+		(buttonProps: ButtonProps) => (
+			<UnderView
+				{...buttonProps}
+				viewProps={props.underLeftViewProps}
+				content={() => props.underLeftContent?.(item, buttonProps)}
+				onPress={() => props.onPressLeft?.(item)}
+				shouldExpand={shouldExpandLeft}
+			/>
+		),
+		[
+			item,
+			props.onPressLeft,
+			props.underLeftContent,
+			props.underLeftViewProps,
+			shouldExpandLeft,
+		],
+	)
+
+	const rightView = useCallback(
+		(buttonProps: ButtonProps) => (
+			<UnderView
+				{...buttonProps}
+				viewProps={props.underRightViewProps}
+				content={() => props.underRightContnet?.(item, buttonProps)}
+				onPress={() => props.onPressRight?.(item)}
+				shouldExpand={shouldExpandRight}
+			/>
+		),
+		[
+			item,
+			props.onPressRight,
+			props.underRightContnet,
+			props.underRightViewProps,
+			shouldExpandRight,
+		],
 	)
 
 	return (
@@ -107,24 +153,8 @@ function RenderItem(props: ItemProps) {
 			canSwipeLeft={props.canSwipeLeft}
 			onOpenChange={open}
 			snap={150}
-			leftView={buttonProps => (
-				<UnderView
-					{...buttonProps}
-					viewProps={props.underLeftViewProps}
-					content={() => props.underLeftContent?.(item, buttonProps)}
-					onPress={() => props.onPressLeft?.(item)}
-					shouldExpand={shouldExpandLeft}
-				/>
-			)}
-			rightView={buttonProps => (
-				<UnderView
-					{...buttonProps}
-					viewProps={props.underRightViewProps}
-					content={() => props.underRightContnet?.(item, buttonProps)}
-					onPress={() => props.onPressRight?.(item)}
-					shouldExpand={shouldExpandRight}
-				/>
-			)}
+			leftView={leftView}
+			rightView={rightView}
 		>
 			<View className='flex-row gap-4 rounded-2xl p-2'>
 				<Image
