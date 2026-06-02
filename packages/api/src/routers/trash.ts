@@ -22,19 +22,37 @@ export const trashRouter = router({
 			.where(eq(trash.user, userId))
 	}),
 	add: protectedProcedure
-		.input(z.string())
-		.mutation(async ({ ctx: { userId }, input }) => {
-			const exits = !!(
-				await db.select().from(trash).where(eq(trash.file, input)).limit(1)
-			)[0]
-			if (exits) return
-			return await db.insert(trash).values({ file: input, user: userId })
+		.input(z.object({ ids: z.array(z.string()) }))
+		.mutation(async ({ ctx: { userId }, input: { ids } }) => {
+			await new Promise(res => setTimeout(res, 3000))
+			return await Promise.all(
+				ids.map(async id => {
+					console.log('moving to trash', id)
+					const exits = !!(
+						await db.select().from(trash).where(eq(trash.file, id)).limit(1)
+					)[0]
+					if (exits) {
+						console.log('file already exits in trash')
+						return
+					}
+					return await db.insert(trash).values({ file: id, user: userId })
+				}),
+			)
 		}),
 	restore: protectedProcedure
-		.input(z.string())
-		.mutation(async ({ ctx: { userId }, input }) => {
-			return await db
-				.delete(trash)
-				.where(and(eq(trash.file, input), eq(trash.user, userId)))
+		.input(
+			z.object({
+				ids: z.array(z.string()),
+			}),
+		)
+		.mutation(async ({ ctx: { userId }, input: { ids } }) => {
+			return await Promise.all(
+				ids.map(
+					async id =>
+						await db
+							.delete(trash)
+							.where(and(eq(trash.file, id), eq(trash.user, userId))),
+				),
+			)
 		}),
 })

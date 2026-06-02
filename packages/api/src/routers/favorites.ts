@@ -38,10 +38,14 @@ export const favoritesRouter = router({
 			})
 		}),
 	remove: protectedProcedure
-		.input(z.string())
-		.mutation(async ({ ctx: { userId }, input }) => {
-			return await db
-				.delete(favorites)
-				.where(and(eq(favorites.file, input), eq(favorites.user, userId)))
+		.input(z.object({ ids: z.array(z.string()) }))
+		.mutation(async ({ ctx: { userId }, input: { ids } }) => {
+			return await Promise.all(
+				ids.map(async id => {
+					return await db
+						.delete(favorites)
+						.where(and(eq(favorites.file, id), eq(favorites.user, userId)))
+				}),
+			)
 		}),
 })
