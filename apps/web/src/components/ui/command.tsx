@@ -1,5 +1,5 @@
-import { CheckIcon, MagnifyingGlassIcon } from '@phosphor-icons/react'
 import { Command as CommandPrimitive } from 'cmdk'
+import { CheckIcon, SearchIcon } from 'lucide-react'
 import type * as React from 'react'
 import {
 	Dialog,
@@ -19,7 +19,7 @@ function Command({
 		<CommandPrimitive
 			data-slot='command'
 			className={cn(
-				'flex size-full flex-col overflow-hidden rounded-none bg-popover text-popover-foreground',
+				'flex size-full flex-col overflow-hidden rounded-4xl bg-popover p-1 text-popover-foreground',
 				className,
 			)}
 			{...props}
@@ -48,7 +48,7 @@ function CommandDialog({
 			</DialogHeader>
 			<DialogContent
 				className={cn(
-					'top-1/3 translate-y-0 overflow-hidden rounded-none p-0',
+					'top-1/3 translate-y-0 overflow-hidden rounded-4xl! p-0',
 					className,
 				)}
 				showCloseButton={showCloseButton}
@@ -64,18 +64,18 @@ function CommandInput({
 	...props
 }: React.ComponentProps<typeof CommandPrimitive.Input>) {
 	return (
-		<div data-slot='command-input-wrapper' className='border-b pb-0'>
-			<InputGroup className='h-8 border-input/30 border-none bg-input/30 shadow-none! *:data-[slot=input-group-addon]:pl-2!'>
+		<div data-slot='command-input-wrapper' className='p-1 pb-0'>
+			<InputGroup className='h-9 bg-input/30'>
 				<CommandPrimitive.Input
 					data-slot='command-input'
 					className={cn(
-						'w-full text-xs outline-hidden disabled:cursor-not-allowed disabled:opacity-50',
+						'w-full text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50',
 						className,
 					)}
 					{...props}
 				/>
 				<InputGroupAddon>
-					<MagnifyingGlassIcon className='size-4 shrink-0 opacity-50' />
+					<SearchIcon className='size-4 shrink-0 opacity-50' />
 				</InputGroupAddon>
 			</InputGroup>
 		</div>
@@ -90,7 +90,7 @@ function CommandList({
 		<CommandPrimitive.List
 			data-slot='command-list'
 			className={cn(
-				'no-scrollbar max-h-72 scroll-py-0 overflow-y-auto overflow-x-hidden outline-none',
+				'no-scrollbar max-h-72 scroll-py-1 overflow-y-auto overflow-x-hidden outline-none',
 				className,
 			)}
 			{...props}
@@ -105,7 +105,7 @@ function CommandEmpty({
 	return (
 		<CommandPrimitive.Empty
 			data-slot='command-empty'
-			className={cn('py-6 text-center text-xs', className)}
+			className={cn('py-6 text-center text-sm', className)}
 			{...props}
 		/>
 	)
@@ -119,7 +119,7 @@ function CommandGroup({
 		<CommandPrimitive.Group
 			data-slot='command-group'
 			className={cn(
-				'overflow-hidden text-foreground **:[[cmdk-group-heading]]:px-2 **:[[cmdk-group-heading]]:py-1.5 **:[[cmdk-group-heading]]:text-muted-foreground **:[[cmdk-group-heading]]:text-xs',
+				'overflow-hidden p-1 text-foreground **:[[cmdk-group-heading]]:px-3 **:[[cmdk-group-heading]]:py-2 **:[[cmdk-group-heading]]:font-medium **:[[cmdk-group-heading]]:text-muted-foreground **:[[cmdk-group-heading]]:text-xs',
 				className,
 			)}
 			{...props}
@@ -134,7 +134,7 @@ function CommandSeparator({
 	return (
 		<CommandPrimitive.Separator
 			data-slot='command-separator'
-			className={cn('-mx-1 h-px bg-border', className)}
+			className={cn('my-1 h-px bg-border/50', className)}
 			{...props}
 		/>
 	)
@@ -149,7 +149,7 @@ function CommandItem({
 		<CommandPrimitive.Item
 			data-slot='command-item'
 			className={cn(
-				"group/command-item relative flex cursor-default select-none items-center gap-2 in-data-[slot=dialog-content]:rounded-none! rounded-none px-2 py-2 text-xs outline-hidden data-[disabled=true]:pointer-events-none data-selected:bg-muted data-selected:text-foreground data-[disabled=true]:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0 data-selected:*:[svg]:text-foreground",
+				"group/command-item relative flex cursor-default select-none items-center gap-2 in-data-[slot=dialog-content]:rounded-2xl rounded-lg px-3 py-2 text-sm outline-hidden data-[disabled=true]:pointer-events-none data-selected:bg-muted data-selected:text-foreground data-[disabled=true]:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0 data-selected:*:[svg]:text-foreground",
 				className,
 			)}
 			{...props}

@@ -1,10 +1,10 @@
 'use client'
 
 import {
-	CaretDownIcon,
-	CaretLeftIcon,
-	CaretRightIcon,
-} from '@phosphor-icons/react'
+	ChevronDownIcon,
+	ChevronLeftIcon,
+	ChevronRightIcon,
+} from 'lucide-react'
 import * as React from 'react'
 import {
 	type DayButton,
@@ -34,7 +34,7 @@ function Calendar({
 		<DayPicker
 			showOutsideDays={showOutsideDays}
 			className={cn(
-				'group/calendar bg-background in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent p-2 [--cell-size:--spacing(7)]',
+				'group/calendar bg-background in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent p-3 [--cell-radius:var(--radius-4xl)] [--cell-size:--spacing(8)]',
 				String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
 				String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
 				className,
@@ -150,18 +150,21 @@ function Calendar({
 				Chevron: ({ className, orientation, ...props }) => {
 					if (orientation === 'left') {
 						return (
-							<CaretLeftIcon className={cn('size-4', className)} {...props} />
+							<ChevronLeftIcon className={cn('size-4', className)} {...props} />
 						)
 					}
 
 					if (orientation === 'right') {
 						return (
-							<CaretRightIcon className={cn('size-4', className)} {...props} />
+							<ChevronRightIcon
+								className={cn('size-4', className)}
+								{...props}
+							/>
 						)
 					}
 
 					return (
-						<CaretDownIcon className={cn('size-4', className)} {...props} />
+						<ChevronDownIcon className={cn('size-4', className)} {...props} />
 					)
 				},
 				DayButton: ({ ...props }) => (

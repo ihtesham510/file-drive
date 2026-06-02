@@ -92,7 +92,7 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
 
 	return (
 		<style
-			// biome-ignore lint/security/noDangerouslySetInnerHtml: <Needed for recharts>
+			// biome-ignore lint/security/noDangerouslySetInnerHtml: <have to set the inner html for recharts>
 			dangerouslySetInnerHTML={{
 				__html: Object.entries(THEMES)
 					.map(
@@ -192,7 +192,7 @@ function ChartTooltipContent({
 	return (
 		<div
 			className={cn(
-				'grid min-w-32 items-start gap-1.5 rounded-none border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl',
+				'grid min-w-32 items-start gap-1.5 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl',
 				className,
 			)}
 		>
