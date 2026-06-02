@@ -1,4 +1,3 @@
-import { Toaster } from '@file-drive/ui/components/sonner'
 import type { QueryClient } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {
@@ -7,12 +6,11 @@ import {
 	Outlet,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
-
-import Header from '@/components/header'
 import { ThemeProvider } from '@/components/theme-provider'
+import { Toaster } from '@/components/ui/sonner'
 import type { trpc } from '@/utils/trpc'
 
-import '../index.css'
+import '../styles/global.css'
 
 export interface RouterAppContext {
 	trpc: typeof trpc
@@ -51,7 +49,6 @@ function RootComponent() {
 				storageKey='vite-ui-theme'
 			>
 				<div className='grid h-svh grid-rows-[auto_1fr]'>
-					<Header />
 					<Outlet />
 				</div>
 				<Toaster richColors />

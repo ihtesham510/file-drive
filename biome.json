@@ -50,6 +50,18 @@
 					}
 				}
 			},
+			"suspicious": {
+				"noArrayIndexKey": "warn"
+			},
+			"a11y": {
+				"noRedundantRoles": "warn",
+				"noStaticElementInteractions": "off",
+				"useAriaPropsForRole": "off",
+				"useFocusableInteractive": "off",
+				"useKeyWithClickEvents": "off",
+				"useSemanticElements": "off"
+			},
+
 			"style": {
 				"noParameterAssign": "error",
 				"useAsConstAssertion": "error",

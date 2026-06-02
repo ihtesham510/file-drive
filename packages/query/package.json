@@ -1,0 +1,25 @@
+{
+	"name": "@file-drive/query",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": {
+			"default": "./index.ts"
+		},
+		"./*": {
+			"default": "./*.ts"
+		}
+	},
+	"dependencies": {
+		"@file-drive/api": "workspace:*",
+		"@file-drive/db": "workspace:*",
+		"@tanstack/react-query": "catalog:",
+		"@trpc/tanstack-react-query": "catalog:",
+		"@trpc/client": "catalog:"
+	},
+	"devDependencies": {
+		"@file-drive/config": "workspace:*",
+		"@types/react-dom": "catalog:",
+		"typescript": "^6"
+	}
+}
