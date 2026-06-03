@@ -1,3 +1,0 @@
-{
-	"buildCommand": "cd ../.. && bunx turbo run build --filter=@file-drive/server"
-}
