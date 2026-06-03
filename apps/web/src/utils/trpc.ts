@@ -1,5 +1,4 @@
 import type { AppRouter } from '@file-drive/api/routers/index'
-import { env } from '@file-drive/env/web'
 import { QueryCache } from '@tanstack/react-query'
 import { createTRPCClient, httpBatchLink } from '@trpc/client'
 import { createTRPCOptionsProxy } from '@trpc/tanstack-react-query'
@@ -28,7 +27,7 @@ export const queryClient = getQueryClient({
 export const trpcClient = createTRPCClient<AppRouter>({
 	links: [
 		httpBatchLink({
-			url: `${env.VITE_SERVER_URL}/trpc`,
+			url: '/trpc',
 			fetch(url, options) {
 				return fetch(url, {
 					...options,
