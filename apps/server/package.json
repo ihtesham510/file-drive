@@ -3,11 +3,11 @@
 	"type": "module",
 	"main": "src/index.ts",
 	"scripts": {
-		"build": "tsdown -d ../../public",
+		"build": "tsdown -d public",
 		"check-types": "tsc -b",
 		"compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server",
 		"dev": "bun run --inspect --hot src/index.ts",
-		"start": "bun run dist/index.mjs"
+		"start": "bun run public/index.mjs"
 	},
 	"dependencies": {
 		"@aws-sdk/client-s3": "^3.1037.0",
