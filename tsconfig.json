@@ -1,3 +1,6 @@
 {
-	"extends": "@file-drive/config/tsconfig.base.json"
+	"extends": "@file-drive/config/tsconfig.base.json",
+	"compilerOptions": {
+		"types": ["bun"]
+	}
 }
