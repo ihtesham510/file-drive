@@ -1,3 +1,4 @@
+import { TanStackDevtools } from '@tanstack/react-devtools'
 import type { QueryClient } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {
@@ -8,12 +9,10 @@ import {
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
-import type { trpc } from '@/utils/trpc'
 
 import '../styles/global.css'
 
 export interface RouterAppContext {
-	trpc: typeof trpc
 	queryClient: QueryClient
 }
 
@@ -53,8 +52,18 @@ function RootComponent() {
 				</div>
 				<Toaster richColors />
 			</ThemeProvider>
-			<TanStackRouterDevtools position='bottom-left' />
-			<ReactQueryDevtools position='bottom' buttonPosition='bottom-right' />
+			<TanStackDevtools
+				plugins={[
+					{
+						name: 'TanStack Query',
+						render: <ReactQueryDevtools />,
+					},
+					{
+						name: 'TanStack Router',
+						render: <TanStackRouterDevtools />,
+					},
+				]}
+			/>
 		</>
 	)
 }

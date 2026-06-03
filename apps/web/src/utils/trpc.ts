@@ -1,10 +1,10 @@
 import type { AppRouter } from '@file-drive/api/routers/index'
 import { env } from '@file-drive/env/web'
-import { getQueryClient } from '@file-drive/query'
 import { QueryCache } from '@tanstack/react-query'
 import { createTRPCClient, httpBatchLink } from '@trpc/client'
 import { createTRPCOptionsProxy } from '@trpc/tanstack-react-query'
 import { toast } from 'sonner'
+import { getQueryClient } from '@/lib/query-client'
 
 export const queryClient = getQueryClient({
 	onSuccess({ message }) {

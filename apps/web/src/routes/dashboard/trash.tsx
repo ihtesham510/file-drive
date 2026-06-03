@@ -27,12 +27,16 @@ import {
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
-import { prefetchTrash, useRestoreFile, useTrashFiles } from '@/hooks/trash'
+import { useTrash } from '@/hooks/use-trash'
+import { trpc } from '@/utils/trpc'
 import { getUri } from '@/utils/uri'
 
 export const Route = createFileRoute('/dashboard/trash')({
 	component: RouteComponent,
-	loader: async () => await prefetchTrash(),
+	loader: async ({ context: { queryClient } }) => {
+		await queryClient.prefetchQuery(trpc.trash.list_files.queryOptions())
+		await queryClient.prefetchQuery(trpc.trash.list_ids.queryOptions())
+	},
 })
 
 function FileSkeleton({ view }: { view: 'grid' | 'list' }) {
@@ -192,12 +196,11 @@ function FileList({
 }
 
 function FilesContent() {
-	const files = useTrashFiles()
-	const restoreFile = useRestoreFile()
+	const { trashFiles, restoreFile } = useTrash()
 	const [view, setView] = useState<'grid' | 'list'>('grid')
 	const [search, setSearch] = useState('')
 
-	const filtered = files.data
+	const filtered = trashFiles.data
 		?.filter(f => f.file.name.toLowerCase().includes(search.toLowerCase()))
 		.map(f => f.file)
 
