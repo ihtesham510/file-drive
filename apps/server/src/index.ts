@@ -11,33 +11,30 @@ import proxyRoute from './proxy'
 import uploadRoute from './upload'
 
 const app = new Hono()
-
-app.use(logger())
-app.use('/*', serveStatic({ root: '../web/dist' }))
-app.use(
-	'/*',
-	cors({
-		origin: env.CORS_ORIGIN,
-		allowMethods: ['GET', 'POST', 'OPTIONS'],
-		allowHeaders: ['Content-Type', 'Authorization'],
-		credentials: true,
-	}),
-)
-
-app.on(['POST', 'GET'], '/api/auth/*', c => auth.handler(c.req.raw))
-
-app.use(
-	'/trpc/*',
-	trpcServer({
-		router: appRouter,
-		createContext: (_opts, context) => {
-			return createContext({ context })
-		},
-	}),
-)
-
-app.route('/upload', uploadRoute)
-app.route('/file-drive', proxyRoute)
+	.use(logger())
+	.use(
+		'/api/*',
+		cors({
+			origin: env.CORS_ORIGIN,
+			allowMethods: ['GET', 'POST', 'OPTIONS'],
+			allowHeaders: ['Content-Type', 'Authorization'],
+			credentials: true,
+		}),
+	)
+	.on(['POST', 'GET'], '/api/auth/*', c => auth.handler(c.req.raw))
+	.use(
+		'/trpc/*',
+		trpcServer({
+			router: appRouter,
+			createContext: (_opts, context) => {
+				return createContext({ context })
+			},
+		}),
+	)
+	.route('/upload', uploadRoute)
+	.route('/file-drive', proxyRoute)
+	.get('*', serveStatic({ root: '../web/dist' }))
+	.get('*', serveStatic({ path: '../web/dist/index.html' }))
 
 Bun.serve({
 	fetch: app.fetch,
