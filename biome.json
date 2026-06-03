@@ -26,6 +26,7 @@
 			"!**/.svelte-kit",
 			"!**/wrangler.jsonc",
 			"!**/.source",
+			"!**/public",
 			"!**/convex/_generated"
 		]
 	},

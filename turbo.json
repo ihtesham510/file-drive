@@ -4,7 +4,7 @@
 		"build": {
 			"dependsOn": ["^build"],
 			"inputs": ["$TURBO_DEFAULT$", ".env*"],
-			"outputs": ["dist/**"],
+			"outputs": ["dist/**", "public/**"],
 			"env": [
 				"BETTER_AUTH_SECRET",
 				"VITE_SERVER_URL",
@@ -17,6 +17,28 @@
 				"SECRET_ACCESS_KEY",
 				"BUCKET"
 			]
+		},
+		"@file-drive/server#build": {
+			"dependsOn": ["@file-drive/web#build", "^build"],
+			"inputs": ["$TURBO_DEFAULT$", ".env*"],
+			"outputs": ["dist/**"],
+			"env": [
+				"BETTER_AUTH_SECRET",
+				"BETTER_AUTH_URL",
+				"CORS_ORIGIN",
+				"DATABASE_URL",
+				"REGION",
+				"S3URL",
+				"ACCESSKEY_ID",
+				"SECRET_ACCESS_KEY",
+				"BUCKET"
+			]
+		},
+		"@file-drive/web#build": {
+			"dependsOn": ["^build"],
+			"inputs": ["$TURBO_DEFAULT$", ".env*"],
+			"outputs": ["dist/**"],
+			"env": ["VITE_SERVER_URL"]
 		},
 		"lint": {
 			"dependsOn": ["^lint"]
