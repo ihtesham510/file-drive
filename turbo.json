@@ -21,7 +21,7 @@
 		"@file-drive/server#build": {
 			"dependsOn": ["@file-drive/web#build", "^build"],
 			"inputs": ["$TURBO_DEFAULT$", ".env*"],
-			"outputs": ["dist/**"],
+			"outputs": ["public/**"],
 			"env": [
 				"BETTER_AUTH_SECRET",
 				"BETTER_AUTH_URL",
