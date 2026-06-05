@@ -1,6 +1,5 @@
 import { db } from '@file-drive/db'
 import { session as sessionTable } from '@file-drive/db/schema/auth'
-import { env } from '@file-drive/env/s3'
 import { getS3Client, uploadFile } from '@file-drive/s3'
 import { zValidator } from '@hono/zod-validator'
 import { eq } from 'drizzle-orm'
@@ -52,7 +51,7 @@ const app = new Hono<{
 				file,
 				client,
 				userId,
-				bucket: env.BUCKET,
+				bucket: 'file-drive-bucket',
 			})
 			return c.json({ key })
 		},

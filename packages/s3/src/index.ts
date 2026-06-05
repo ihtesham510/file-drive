@@ -3,7 +3,7 @@ import { env } from '@file-drive/env/s3'
 
 export const getS3Client = () =>
 	new S3Client({
-		region: env.REGION,
+		region: 'auto',
 		endpoint: env.S3URL,
 		credentials: {
 			accessKeyId: env.ACCESSKEY_ID,
