@@ -4,7 +4,6 @@ import { auth } from '@file-drive/auth'
 import { env } from '@file-drive/env/server'
 import { trpcServer } from '@hono/trpc-server'
 import { Hono } from 'hono'
-import { serveStatic } from 'hono/bun'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
 import proxyRoute from './proxy'
@@ -33,8 +32,7 @@ const app = new Hono()
 	)
 	.route('/upload', uploadRoute)
 	.route('/file-drive', proxyRoute)
-	.get('*', serveStatic({ root: '../web/dist' }))
-	.get('*', serveStatic({ path: '../web/dist/index.html' }))
+	.get('/', c => c.json('OK'))
 
 Bun.serve({
 	fetch: app.fetch,
