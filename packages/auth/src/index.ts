@@ -18,6 +18,7 @@ export function createAuth() {
 		trustedOrigins: [
 			env.CORS_ORIGIN,
 			'file-drive://',
+			'http://localhost:3000',
 			...(env.NODE_ENV === 'development'
 				? [
 						'exp://',

@@ -1,0 +1,8 @@
+[build]
+command = "bun run build"                 # or your turbo build command
+publish = "/apps/server/dist"             # your publish dir (can be empty/dummy for API-only apps)
+edge_functions = "netlify/edge-functions"
+
+[[edge_functions]]
+function = "index"
+path = "/*"
