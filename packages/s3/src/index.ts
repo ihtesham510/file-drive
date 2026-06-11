@@ -1,5 +1,5 @@
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
-import { env } from '@file-drive/env/s3'
+import { env } from '@file-drive/env/server'
 
 export const getS3Client = () =>
 	new S3Client({

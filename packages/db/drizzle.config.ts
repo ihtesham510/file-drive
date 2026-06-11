@@ -1,4 +1,4 @@
-import { env } from '@file-drive/env/db'
+import { env } from '@file-drive/env/server'
 import { defineConfig } from 'drizzle-kit'
 
 export default defineConfig({
