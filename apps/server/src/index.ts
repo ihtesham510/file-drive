@@ -1,4 +1,5 @@
 import { Hono } from 'hono'
+import { handle } from 'hono/vercel'
 
 const app = new Hono()
 	// .use(logger())
@@ -25,4 +26,4 @@ const app = new Hono()
 	// .route('/file-drive', proxyRoute)
 	.get('/', c => c.json('OK'))
 
-export default app
+export default handle(app)
