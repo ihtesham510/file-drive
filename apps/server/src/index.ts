@@ -6,7 +6,6 @@ import { trpcServer } from '@hono/trpc-server'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
-import { handle } from 'hono/vercel'
 import proxyRoute from './proxy'
 import uploadRoute from './upload'
 
@@ -35,4 +34,4 @@ const app = new Hono()
 	.route('/file-drive', proxyRoute)
 	.get('/', c => c.json('OK'))
 
-export default handle(app)
+export default app
