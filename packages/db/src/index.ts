@@ -1,4 +1,4 @@
-import { env } from '@file-drive/env/server'
+import { env } from '@file-drive/env/db'
 import { drizzle } from 'drizzle-orm/node-postgres'
 
 import * as schema from './schema'
