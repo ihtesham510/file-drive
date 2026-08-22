@@ -1,10 +1,11 @@
 name: file-drive
+
 services:
   minio:
     image: minio/minio:latest
-    container_name: minio
+    container_name: file-drive-minio
     ports:
-      - "7000:7000" 
+      - "7000:7000"
       - "7001:7001"
     environment:
       MINIO_ROOT_USER: minioadmin
@@ -19,5 +20,19 @@ services:
       timeout: 20s
       retries: 3
 
+  createbuckets:
+    image: minio/mc
+    container_name: file-drive-createbuckets
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:7000 minioadmin minioadmin;
+      mc mb -p local/my-bucket;
+      mc anonymous set download local/my-bucket;
+      exit 0;
+      "
 volumes:
   minio_data:
+

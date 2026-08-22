@@ -1,7 +1,0 @@
-{
-	"extends": "@file-drive/config/tsconfig.base.json",
-	"compilerOptions": {
-		"jsx": "react-jsx",
-		"lib": ["ESNext"]
-	}
-}

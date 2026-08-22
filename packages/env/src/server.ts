@@ -15,6 +15,7 @@ export const env = createEnv({
 		S3URL: z.string().min(1),
 		ACCESSKEY_ID: z.string().min(1),
 		SECRET_ACCESS_KEY: z.string().min(1),
+		BUCKET_NAME: z.string().min(1),
 		// node environment
 		NODE_ENV: z
 			.enum(['development', 'production', 'test'])

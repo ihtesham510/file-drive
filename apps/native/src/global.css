@@ -1,0 +1,82 @@
+/* global.css */
+/** biome-ignore-all lint/suspicious/noDuplicateCustomProperties: <Theme can have duplicate variables> */
+@import "tailwindcss";
+@import "uniwind";
+
+@layer theme {
+	:root {
+		/* ---------- LIGHT ---------- */
+		@variant light {
+			--color-background: #ffffff;
+			--color-foreground: #1a1a1a;
+
+			--color-card: #fcfcfc;
+			--color-card-foreground: #1a1a1a;
+
+			--color-popover: #ffffff;
+			--color-popover-foreground: #1a1a1a;
+
+			--color-primary: #3e5eeb;
+			--color-primary-foreground: #fafafa;
+
+			--color-secondary: #f1f2f8;
+			--color-secondary-foreground: #23262f;
+
+			--color-muted: #f5f5f5;
+			--color-muted-foreground: #7d7d7d;
+
+			--color-accent: #eaebf5;
+			--color-accent-foreground: #23262f;
+
+			--color-destructive: #dc3545;
+			--color-destructive-foreground: #fafafa;
+
+			--color-success: #3fa65c;
+			--color-success-foreground: #fafafa;
+
+			--color-warning: #e0a937;
+			--color-warning-foreground: #2b2100;
+
+			--color-border: #e5e5e5;
+			--color-input: #e5e5e5;
+			--color-ring: #3e5eeb;
+		}
+
+		/* ---------- DARK (dirty charcoal, Compose-style) ---------- */
+		@variant dark {
+			--color-background: #1c1b17;
+			--color-foreground: #ecebe8;
+
+			--color-card: #23221d;
+			--color-card-foreground: #ecebe8;
+
+			--color-popover: #272620;
+			--color-popover-foreground: #ecebe8;
+
+			--color-primary: #8aa0f5;
+			--color-primary-foreground: #131a33;
+
+			--color-secondary: #322f27;
+			--color-secondary-foreground: #e4e2dd;
+
+			--color-muted: #2d2b26;
+			--color-muted-foreground: #a8a49b;
+
+			--color-accent: #353128;
+			--color-accent-foreground: #ecebe8;
+
+			--color-destructive: #c8453b;
+			--color-destructive-foreground: #f5f1ee;
+
+			--color-success: #5fb584;
+			--color-success-foreground: #0f2318;
+
+			--color-warning: #d6a64c;
+			--color-warning-foreground: #241b04;
+
+			--color-border: #3a3730;
+			--color-input: #3a3730;
+			--color-ring: #8aa0f5;
+		}
+	}
+}

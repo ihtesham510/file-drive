@@ -1,12 +1,12 @@
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import type { QueryClient } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools'
 import {
 	createRootRouteWithContext,
 	HeadContent,
 	Outlet,
 } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
+import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
 
@@ -56,11 +56,11 @@ function RootComponent() {
 				plugins={[
 					{
 						name: 'TanStack Query',
-						render: <ReactQueryDevtools />,
+						render: <ReactQueryDevtoolsPanel />,
 					},
 					{
 						name: 'TanStack Router',
-						render: <TanStackRouterDevtools />,
+						render: <TanStackRouterDevtoolsPanel />,
 					},
 				]}
 			/>

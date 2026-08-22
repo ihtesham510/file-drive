@@ -13,7 +13,8 @@
 		"s3:start": "docker compose up -d",
 		"s3:watch": "docker compose up",
 		"s3:stop": "docker compose stop",
-		"s3:down": "docker compose down"
+		"s3:down": "docker compose down",
+		"s3:remove": "docker compose down -v"
 	},
 	"dependencies": {
 		"@aws-sdk/client-s3": "^3.1037.0",

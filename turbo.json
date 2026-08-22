@@ -79,6 +79,9 @@
 		"db:down": {
 			"cache": false
 		},
+		"db:remove": {
+			"cache": false
+		},
 		"s3:start": {
 			"cache": false,
 			"persistent": true
@@ -91,6 +94,9 @@
 			"persistent": true
 		},
 		"s3:down": {
+			"cache": false
+		},
+		"s3:remove": {
 			"cache": false
 		}
 	}
