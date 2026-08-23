@@ -1,44 +1,11 @@
 {
 	"$schema": "https://turbo.build/schema.json",
+	"ui": "tui",
 	"tasks": {
 		"build": {
 			"dependsOn": ["^build"],
 			"inputs": ["$TURBO_DEFAULT$", ".env*"],
-			"outputs": ["dist/**", "public/**"],
-			"env": [
-				"BETTER_AUTH_SECRET",
-				"VITE_SERVER_URL",
-				"BETTER_AUTH_URL",
-				"CORS_ORIGIN",
-				"DATABASE_URL",
-				"REGION",
-				"S3URL",
-				"ACCESSKEY_ID",
-				"SECRET_ACCESS_KEY",
-				"BUCKET"
-			]
-		},
-		"@file-drive/server#build": {
-			"dependsOn": ["@file-drive/web#build", "^build"],
-			"inputs": ["$TURBO_DEFAULT$", ".env*"],
-			"outputs": ["public/**"],
-			"env": [
-				"BETTER_AUTH_SECRET",
-				"BETTER_AUTH_URL",
-				"CORS_ORIGIN",
-				"DATABASE_URL",
-				"REGION",
-				"S3URL",
-				"ACCESSKEY_ID",
-				"SECRET_ACCESS_KEY",
-				"BUCKET"
-			]
-		},
-		"@file-drive/web#build": {
-			"dependsOn": ["^build"],
-			"inputs": ["$TURBO_DEFAULT$", ".env*"],
-			"outputs": ["dist/**"],
-			"env": ["VITE_SERVER_URL"]
+			"outputs": ["dist/**"]
 		},
 		"lint": {
 			"dependsOn": ["^lint"]
@@ -51,23 +18,23 @@
 			"persistent": true
 		},
 		"db:push": {
-			"cache": false
+			"cache": false,
+			"interactive": true
 		},
 		"db:generate": {
-			"cache": false
+			"cache": false,
+			"interactive": true
 		},
 		"db:migrate": {
 			"cache": false,
-			"persistent": true,
-			"env": ["DATABASE_URL"]
+			"interactive": true
 		},
 		"db:studio": {
 			"cache": false,
 			"persistent": true
 		},
 		"db:start": {
-			"cache": false,
-			"persistent": true
+			"cache": false
 		},
 		"db:stop": {
 			"cache": false
@@ -83,8 +50,7 @@
 			"cache": false
 		},
 		"s3:start": {
-			"cache": false,
-			"persistent": true
+			"cache": false
 		},
 		"s3:stop": {
 			"cache": false

@@ -5,19 +5,17 @@
 	"type": "module",
 	"exports": {
 		"./server": "./src/server.ts",
-		"./s3": "./src/s3.ts",
 		"./web": "./src/web.ts",
-		"./db": "./src/db.ts",
 		"./native": "./src/native.ts"
 	},
 	"dependencies": {
-		"@t3-oss/env-core": "^0.13.1",
+		"@t3-oss/env-core": "^0.13.11",
 		"dotenv": "catalog:",
 		"zod": "catalog:"
 	},
 	"devDependencies": {
 		"@file-drive/config": "workspace:*",
 		"@types/bun": "catalog:",
-		"typescript": "^6"
+		"typescript": "^6.0.3"
 	}
 }

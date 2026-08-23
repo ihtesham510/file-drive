@@ -2,7 +2,7 @@ name: file-drive
 
 services:
   postgres:
-    image: postgres
+    image: postgres:18
     container_name: file-drive-postgres
     environment:
       POSTGRES_DB: file-drive

@@ -1,5 +1,4 @@
-import { Link, useNavigate } from '@tanstack/react-router'
-import { Button } from '@/components/ui/button'
+import { Button } from '@file-drive/ui/components/button'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -8,8 +7,9 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Skeleton } from '@/components/ui/skeleton'
+} from '@file-drive/ui/components/dropdown-menu'
+import { Skeleton } from '@file-drive/ui/components/skeleton'
+import { Link, useNavigate } from '@tanstack/react-router'
 
 import { authClient } from '@/lib/auth-client'
 
@@ -31,7 +31,9 @@ export default function UserMenu() {
 
 	return (
 		<DropdownMenu>
-			<DropdownMenuTrigger asChild>{session.user.name}</DropdownMenuTrigger>
+			<DropdownMenuTrigger render={<Button variant='outline' />}>
+				{session.user.name}
+			</DropdownMenuTrigger>
 			<DropdownMenuContent className='bg-card'>
 				<DropdownMenuGroup>
 					<DropdownMenuLabel>My Account</DropdownMenuLabel>

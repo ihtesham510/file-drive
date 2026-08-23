@@ -12,20 +12,16 @@
 	"scripts": {},
 	"dependencies": {
 		"@file-drive/auth": "workspace:*",
-		"@file-drive/s3": "workspace:*",
 		"@file-drive/db": "workspace:*",
 		"@file-drive/env": "workspace:*",
 		"@trpc/client": "catalog:",
 		"@trpc/server": "catalog:",
-		"@types/pg": "catalog:",
 		"dotenv": "catalog:",
-		"drizzle-orm": "catalog:",
-		"drizzle-zod": "catalog:",
 		"zod": "catalog:"
 	},
 	"devDependencies": {
 		"@file-drive/config": "workspace:*",
 		"hono": "catalog:",
-		"typescript": "^6"
+		"typescript": "^6.0.3"
 	}
 }

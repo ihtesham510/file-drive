@@ -5,6 +5,27 @@ import { z } from 'zod'
 
 dotenv.config({ path: resolve(process.cwd(), '../../.env') })
 
+function getVercelOrigin() {
+	const vercelUrl =
+		process.env.VERCEL_ENV === 'production'
+			? (process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL)
+			: (process.env.VERCEL_URL ?? process.env.VERCEL_PROJECT_PRODUCTION_URL)
+	if (!vercelUrl) return undefined
+	return vercelUrl.startsWith('http') ? vercelUrl : `https://${vercelUrl}`
+}
+
+const vercelOrigin = getVercelOrigin()
+
+const runtimeEnv = {
+	...process.env,
+	// Public auth base: /api/auth bypasses the rewrite's path strip, so the
+	// same URL works for incoming matching and generated callbacks
+	BETTER_AUTH_URL:
+		process.env.BETTER_AUTH_URL ??
+		(vercelOrigin ? `${vercelOrigin}/api/auth` : undefined),
+	CORS_ORIGIN: process.env.CORS_ORIGIN ?? vercelOrigin,
+}
+
 export const env = createEnv({
 	server: {
 		DATABASE_URL: z.string().min(1),
@@ -12,15 +33,16 @@ export const env = createEnv({
 		BETTER_AUTH_URL: z.url(),
 		CORS_ORIGIN: z.url(),
 		// s3
-		S3URL: z.string().min(1),
+		S3URL: z.url(),
 		ACCESSKEY_ID: z.string().min(1),
 		SECRET_ACCESS_KEY: z.string().min(1),
-		BUCKET_NAME: z.string().min(1),
-		// node environment
+		BUCKET_NAME: z.string(),
+
 		NODE_ENV: z
 			.enum(['development', 'production', 'test'])
 			.default('development'),
 	},
-	runtimeEnv: process.env,
+	runtimeEnv: runtimeEnv,
+	skipValidation: !!process.env.SKIP_ENV_VALIDATION,
 	emptyStringAsUndefined: true,
 })

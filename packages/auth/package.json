@@ -20,6 +20,6 @@
 	},
 	"devDependencies": {
 		"@file-drive/config": "workspace:*",
-		"typescript": "^6"
+		"typescript": "^6.0.3"
 	}
 }

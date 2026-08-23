@@ -1,7 +1,3 @@
 {
-	"extends": "@file-drive/config/tsconfig.base.json",
-	"compilerOptions": {
-		"types": ["bun"]
-	},
-	"exclude": ["apps", "packages", "node_modules"]
+	"extends": "@file-drive/config/tsconfig.base.json"
 }

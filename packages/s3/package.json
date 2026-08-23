@@ -1,5 +1,7 @@
 {
 	"name": "@file-drive/s3",
+	"version": "0.0.0",
+	"private": true,
 	"type": "module",
 	"exports": {
 		".": {
@@ -9,24 +11,19 @@
 			"default": "./src/*.ts"
 		}
 	},
+	"dependencies": {
+		"@aws-sdk/client-s3": "^3.1116.0",
+		"@aws-sdk/s3-request-presigner": "^3.1116.0",
+		"@file-drive/env": "workspace:*",
+		"dotenv": "catalog:",
+		"zod": "catalog:"
+	},
 	"scripts": {
+		"check-types": "tsc --noEmit",
 		"s3:start": "docker compose up -d",
 		"s3:watch": "docker compose up",
 		"s3:stop": "docker compose stop",
 		"s3:down": "docker compose down",
 		"s3:remove": "docker compose down -v"
-	},
-	"dependencies": {
-		"@aws-sdk/client-s3": "^3.1037.0",
-		"@aws-sdk/s3-request-presigner": "^3.1037.0",
-		"@file-drive/env": "workspace:*",
-		"dotenv": "catalog:",
-		"zod": "catalog:"
-	},
-	"devDependencies": {
-		"@file-drive/config": "workspace:*",
-		"@types/pg": "catalog:",
-		"drizzle-kit": "^0.31.8",
-		"typescript": "^6"
 	}
 }

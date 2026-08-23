@@ -8,26 +8,32 @@ import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
 
 const app = new Hono()
-	.use(logger())
-	.use(
-		'/api/*',
-		cors({
-			origin: env.CORS_ORIGIN,
-			allowMethods: ['GET', 'POST', 'OPTIONS'],
-			allowHeaders: ['Content-Type', 'Authorization'],
-			credentials: true,
-		}),
-	)
-	.on(['POST', 'GET'], '/api/auth/*', c => auth.handler(c.req.raw))
-	.use(
-		'/trpc/*',
-		trpcServer({
-			router: appRouter,
-			createContext: (_opts, context) => {
-				return createContext({ context })
-			},
-		}),
-	)
-	.get('/', c => c.json('OK'))
+
+app.use(logger())
+app.use(
+	'/*',
+	cors({
+		origin: env.CORS_ORIGIN,
+		allowMethods: ['GET', 'POST', 'OPTIONS'],
+		allowHeaders: ['Content-Type', 'Authorization'],
+		credentials: true,
+	}),
+)
+
+app.on(['POST', 'GET'], '/api/auth/*', c => auth.handler(c.req.raw))
+
+app.use(
+	'/trpc/*',
+	trpcServer({
+		router: appRouter,
+		createContext: (_opts, context) => {
+			return createContext({ context })
+		},
+	}),
+)
+
+app.get('/', c => {
+	return c.text('OK')
+})
 
 export default app

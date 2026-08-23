@@ -1,18 +1,21 @@
-import { TanStackDevtools } from '@tanstack/react-devtools'
+import { Toaster } from '@file-drive/ui/components/sonner'
 import type { QueryClient } from '@tanstack/react-query'
-import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {
 	createRootRouteWithContext,
 	HeadContent,
 	Outlet,
 } from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { ThemeProvider } from '@/components/theme-provider'
-import { Toaster } from '@/components/ui/sonner'
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 
-import '../styles/global.css'
+import Header from '@/components/header'
+import { ThemeProvider } from '@/components/theme-provider'
+import type { trpc } from '@/utils/trpc'
+
+import '../index.css'
 
 export interface RouterAppContext {
+	trpc: typeof trpc
 	queryClient: QueryClient
 }
 
@@ -48,22 +51,13 @@ function RootComponent() {
 				storageKey='vite-ui-theme'
 			>
 				<div className='grid h-svh grid-rows-[auto_1fr]'>
+					<Header />
 					<Outlet />
 				</div>
 				<Toaster richColors />
 			</ThemeProvider>
-			<TanStackDevtools
-				plugins={[
-					{
-						name: 'TanStack Query',
-						render: <ReactQueryDevtoolsPanel />,
-					},
-					{
-						name: 'TanStack Router',
-						render: <TanStackRouterDevtoolsPanel />,
-					},
-				]}
-			/>
+			<TanStackRouterDevtools position='bottom-left' />
+			<ReactQueryDevtools position='bottom' buttonPosition='bottom-right' />
 		</>
 	)
 }

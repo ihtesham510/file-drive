@@ -5,10 +5,11 @@
 		"version": "1.0.0",
 		"orientation": "portrait",
 		"icon": "./assets/images/icon.png",
-		"scheme": "filedrive",
+		"scheme": "file-drive",
 		"userInterfaceStyle": "automatic",
 		"ios": {
-			"icon": "./assets/expo.icon"
+			"supportsTablet": true,
+			"bundleIdentifier": "com.anonymous.file-drive"
 		},
 		"android": {
 			"adaptiveIcon": {
@@ -17,9 +18,11 @@
 				"backgroundImage": "./assets/images/android-icon-background.png",
 				"monochromeImage": "./assets/images/android-icon-monochrome.png"
 			},
-			"predictiveBackGestureEnabled": false
+			"predictiveBackGestureEnabled": false,
+			"package": "com.anonymous.filedrive"
 		},
 		"web": {
+			"bundler": "metro",
 			"output": "static",
 			"favicon": "./assets/images/favicon.png"
 		},
@@ -28,12 +31,15 @@
 			[
 				"expo-splash-screen",
 				{
-					"backgroundColor": "#208AEF",
 					"image": "./assets/images/splash-icon.png",
-					"imageWidth": 76
+					"imageWidth": 200,
+					"resizeMode": "contain",
+					"backgroundColor": "#ffffff",
+					"dark": {
+						"backgroundColor": "#000000"
+					}
 				}
-			],
-			"expo-status-bar"
+			]
 		],
 		"experiments": {
 			"typedRoutes": true,
