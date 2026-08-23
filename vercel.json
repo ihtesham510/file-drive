@@ -42,6 +42,12 @@
 			}
 		},
 		{
+			"source": "/trpc/(.*)",
+			"destination": {
+				"service": "server"
+			}
+		},
+		{
 			"source": "/(.*)",
 			"destination": {
 				"service": "web"
